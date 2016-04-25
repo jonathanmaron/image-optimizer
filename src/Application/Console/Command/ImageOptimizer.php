@@ -164,5 +164,5 @@ class ImageOptimizer extends Command
     {
         $this->indexOnly = $indexOnly;
     }
-    
+
 }

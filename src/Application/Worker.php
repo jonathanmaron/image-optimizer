@@ -15,6 +15,8 @@ class Worker
     {
         $ret = false;
 
+        $mode = fileperms($filename);
+
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
 
@@ -32,6 +34,8 @@ class Worker
                 );
                 break;
         }
+
+        chmod($filename, $mode);
 
         return $ret;
     }
