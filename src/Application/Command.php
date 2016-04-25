@@ -69,7 +69,6 @@ class Command extends ConsoleCommand
 
     protected function execute   (InputInterface $input, OutputInterface $output)
     {
-
         $history = new History();
         $worker  = new Worker();
 
@@ -118,17 +117,15 @@ class Command extends ConsoleCommand
 
             if ($history->isUnoptimizedImage($filename)) {
 
-                $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
-                $current = $padding->label($label);
-
                 $subTotals = [
-                    'in'        => 0,
+                    'in'        => filesize($filename),
                     'out'       => 0,
                     'diff'      => 0,
                     'diff_pct'  => 0,
                 ];
 
-                $subTotals['in'] = filesize($filename);
+                $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
+                $current = $padding->label($label);
 
                 if ($worker->optimizeImage($filename)) {
 
