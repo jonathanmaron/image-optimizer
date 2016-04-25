@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImageOptimizer extends Command
 {
+    const CHAR_WIDTH = 200;
+
     protected $console;
     protected $path;
     protected $indexOnly;
@@ -70,6 +72,7 @@ class ImageOptimizer extends Command
 
     protected function execute   (InputInterface $input, OutputInterface $output)
     {
+
         $history = new History();
         $worker  = new Worker();
         $console = $this->getConsole();
@@ -78,11 +81,14 @@ class ImageOptimizer extends Command
         $fileInfosCount   = count($fileInfos);
         $fileInfosCounter = 0;
 
+        $padding = $console->padding(self::CHAR_WIDTH);
+
         $console->clear();
 
-        $console->out(sprintf('Found %d image file(s).',
-            $fileInfosCount
-        ));
+        $this->prefixBanner();
+
+        $line = sprintf('Found %d image file(s).', $fileInfosCount);
+        $console->out($line)->br();
 
         foreach ($fileInfos as $fileInfo)
         {
@@ -92,9 +98,10 @@ class ImageOptimizer extends Command
 
             if ($this->getIndexOnly()) {
 
-                $console->out(sprintf('%d/%d: %s - Indexed.',
-                    $fileInfosCounter, $fileInfosCount, $filename
-                ));
+                $label  = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
+                $result = 'Indexed.';
+                $current = $padding->label($label);
+                $current->result($result);
 
                 $history->setImageAsOptimized($filename);
 
@@ -102,6 +109,9 @@ class ImageOptimizer extends Command
             }
 
             if ($history->isUnoptimizedImage($filename)) {
+
+                $label  = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
+                $current = $padding->label($label);
 
                 $s = ['in' => 0, 'out' => 0, 'diff' => 0, 'diff_p' => 0];
 
@@ -118,24 +128,48 @@ class ImageOptimizer extends Command
                         $s['diff_p'] = 100 - ( ($s['out'] / $s['in']) * 100 );
                     }
 
-                    $console->out(sprintf('%d/%d: %s - In: %d Out: %d Diff: %d Diff_P : %01.2f',
-                        $fileInfosCounter, $fileInfosCount, $filename,
-                        $s['in'], $s['out'], $s['diff'], $s['diff_p']
-                    ));
+                    //$result = sprintf('In: %d Out: %d Diff: %d Diff_P : %01.2f',$s['in'], $s['out'], $s['diff'], $s['diff_p']);
+                    $result = sprintf('Saving: %s %%.', $s['diff_p']);
+                    $current->result($result);
 
                     $history->setImageAsOptimized($filename);
                 }
 
             } else {
 
-                $console->out(sprintf('%d/%d: %s - Already optimized.',
-                    $fileInfosCounter, $fileInfosCount, $filename
-                ));
+                $label  = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
+                $result = 'Skipped.';
+                $current = $padding->label($label);
+                $current->result($result);
 
             }
 
         }
 
+        $this->suffixBanner();
+
+    }
+
+    protected function prefixBanner()
+    {
+        $console = $this->getConsole();
+
+        $console->br()
+                ->out('Started at ' . date('r'))
+                ->br();
+
+        return $this;
+    }
+
+    protected function suffixBanner()
+    {
+        $console = $this->getConsole();
+
+        $console->br()
+                ->out('Finished at ' . date('r'))
+                ->br();
+
+        return $this;
     }
 
     protected function getConsole()
