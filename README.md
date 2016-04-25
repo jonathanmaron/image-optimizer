@@ -1,9 +1,11 @@
 
 # image-optimizer.sh
 
-Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files from the CLI, using `pngout`, `pngcrush` and `jpegtran`.
+Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files from the CLI, using `pngout`, `pngcrush` and `jpegtran` and can usually reduce the filesize by 10% to 70%.
 
-Using `image-optimizer.sh`, you can reduce the filesize of the images in your project by 10% to 70%, without loosing any quality.
+As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer.sh` keeps track of which image files it has optimized. Each image file will only be optimize once.
+
+`image-optimizer.sh` is intended to be run unattended in a cronjob.
 
 ## Example usage
 
