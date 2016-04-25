@@ -129,7 +129,7 @@ class ImageOptimizer extends Command
                     }
 
                     //$result = sprintf('In: %d Out: %d Diff: %d Diff_P : %01.2f',$s['in'], $s['out'], $s['diff'], $s['diff_p']);
-                    $result = sprintf('Saving: %s %%.', $s['diff_p']);
+                    $result = sprintf('Saving: %01.4f %%.', $s['diff_p']);
                     $current->result($result);
 
                     $history->setImageAsOptimized($filename);
