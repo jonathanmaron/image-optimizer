@@ -61,8 +61,8 @@ class Worker
     {
         $tempFilename = $this->getTempFilename();
 
-        $format = '/usr/bin/env jpegtran -optimize -progressive %s > %s > /dev/null 2>&1';
-        $exec   = sprintf($format, escapeshellarg($filename), escapeshellarg($tempFilename));
+        $format = '/usr/bin/env jpegtran -optimize -progressive -outfile %s %s > /dev/null 2>&1';
+        $exec   = sprintf($format, escapeshellarg($tempFilename), escapeshellarg($filename));
         exec($exec);
 
         rename($tempFilename, $filename);
