@@ -13,8 +13,6 @@ class Worker
 {
     public function optimizeImage($filename)
     {
-        $ret = false;
-
         $mode = fileperms($filename);
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
