@@ -80,6 +80,7 @@ class Command extends ConsoleCommand
         $grandTotals = [
             'skipped'   => 0,
             'optimized' => 0,
+            'indexed'   => 0,
             'in'        => 0,
             'out'       => 0,
             'diff'      => 0,
@@ -109,6 +110,8 @@ class Command extends ConsoleCommand
                 $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
                 $current = $padding->label($label);
                 $current->result('Indexed.');
+
+                $grandTotals['indexed']++;
 
                 $history->setImageAsOptimized($filename);
 
@@ -143,7 +146,6 @@ class Command extends ConsoleCommand
 
                     $grandTotals['in']  =+ $subTotals['in'];
                     $grandTotals['out'] =+ $subTotals['out'];
-
                     $grandTotals['optimized']++;
 
                     $history->setImageAsOptimized($filename);
@@ -173,6 +175,7 @@ class Command extends ConsoleCommand
                 ->out(sprintf('  Total     : %d file(s)'       , $fileInfosCount)           )
                 ->out(sprintf('  Optimized : %d file(s)'       , $grandTotals['optimized']) )
                 ->out(sprintf('  Skipped   : %d file(s)'       , $grandTotals['skipped'])   )
+                ->out(sprintf('  Indexed   : %d file(s)'       , $grandTotals['indexed'])   )
                 ->br()
                 ->out(sprintf('  In        : %d b'             , $grandTotals['in'])        )
                 ->out(sprintf('  Out       : %d b'             , $grandTotals['out'])       )
@@ -189,10 +192,9 @@ class Command extends ConsoleCommand
     {
         $console = $this->getConsole();
 
-        $console->clear();
-
-        $console->br()
-                ->out('Started at ' . date('r'))
+        $console->clear()
+                ->br()
+                ->out('Started at ' . date('r') . '.')
                 ->br()
                 ->out(sprintf('Found %d image file(s).', $fileInfosCount))
                 ->br();
@@ -205,7 +207,7 @@ class Command extends ConsoleCommand
         $console = $this->getConsole();
 
         $console->br()
-                ->out('Finished at ' . date('r'))
+                ->out('Finished at ' . date('r') . '.')
                 ->br();
 
         return $this;
