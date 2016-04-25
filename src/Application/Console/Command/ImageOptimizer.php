@@ -78,6 +78,8 @@ class ImageOptimizer extends Command
         $fileInfosCount   = count($fileInfos);
         $fileInfosCounter = 0;
 
+        $console->clear();
+
         $console->out(sprintf('Found %d image file(s).',
             $fileInfosCount
         ));
