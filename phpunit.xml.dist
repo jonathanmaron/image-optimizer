@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true">
+
+    <testsuites>
+        <testsuite name="jonathanmaron/image-optimizer">
+            <directory>./test</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <ini name="error_reporting" value="E_ALL"/>
+        <ini name="date.timezone" value="UTC"/>
+        <ini name="intl.default_locale" value="en_US"/>
+    </php>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+
+</phpunit>
