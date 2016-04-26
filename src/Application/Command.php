@@ -136,8 +136,8 @@ class Command extends ConsoleCommand
                     $result = sprintf('Saving: %01.4f %%.', $subTotals['diff_pct']);
                     $current->result($result);
 
-                    $grandTotals['in']  =+ $subTotals['in'];
-                    $grandTotals['out'] =+ $subTotals['out'];
+                    $grandTotals['in']  += $subTotals['in'];
+                    $grandTotals['out'] += $subTotals['out'];
                     $grandTotals['optimized']++;
 
                     $history->setImageAsOptimized($filename);
