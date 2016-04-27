@@ -2,8 +2,6 @@
 
 namespace Application\Command;
 
-use League\CLImate\CLImate;
-
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,14 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Application\History;
 use Application\Worker;
 
-class ImageOptimizer extends Command
+class ImageOptimizer extends ImageOptimizerAbstract
 {
-    const CHAR_WIDTH = 150;
-
-    protected $console;
-    protected $path;
-    protected $indexOnly;
-
     protected function configure()
     {
         $this->setName('image-optimizer');
@@ -40,15 +32,18 @@ class ImageOptimizer extends Command
             'Do not optimize images, just index them.'
         );
 
+        return $this;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $worker = new Worker();
         $worker->checkDependencies();
+
+        return $this;
     }
 
-    protected function interact  (InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output)
     {
         $path     = $input->getArgument('path');
         $realPath = realpath($path);
@@ -68,15 +63,16 @@ class ImageOptimizer extends Command
         }
 
         $this->setIndexOnly($indexOnly);
+
+        return $this;
     }
 
-    protected function execute   (InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $history = new History();
         $worker  = new Worker();
 
-        $console = $this->getConsole();
-        $padding = $console->padding(self::CHAR_WIDTH);
+        $consolePadding = $this->getConsole()->padding($this->getLinePadding());
 
         $grandTotals = [
             'skipped'   => 0,   // Number of image files, which have been skipped
@@ -92,7 +88,7 @@ class ImageOptimizer extends Command
         $fileInfosCount   = count($fileInfos);
         $fileInfosCounter = 0;
 
-        $this->prefixBanner($fileInfosCount);
+        $this->consoleBannerPrefix($fileInfosCount);
 
         foreach ($fileInfos as $fileInfo)
         {
@@ -102,13 +98,13 @@ class ImageOptimizer extends Command
 
             if ($this->getIndexOnly()) {
 
-                $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
-                $current = $padding->label($label);
-                $current->result('Indexed.');
+                $consoleLabel = $this->labelHelper($fileInfosCount, $fileInfosCounter, $filename);
 
-                $grandTotals['indexed']++;
+                $consolePadding->label($consoleLabel)->result('Indexed.');
 
                 $history->setImageAsOptimized($filename);
+
+                $grandTotals['indexed']++;
 
                 continue;
             }
@@ -122,8 +118,9 @@ class ImageOptimizer extends Command
                     'diff_pct' => 0,                   // Difference as percent between 'in' and 'out'
                 ];
 
-                $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
-                $current = $padding->label($label);
+                $consoleLabel = $this->labelHelper($fileInfosCount, $fileInfosCounter, $filename);
+
+                $consoleCurrentPadding = $consolePadding->label($consoleLabel);
 
                 if ($worker->optimizeImage($filename)) {
 
@@ -136,108 +133,32 @@ class ImageOptimizer extends Command
                         $subTotals['diff_pct'] = 100 - ( ($subTotals['out'] / $subTotals['in']) * 100 );
                     }
 
-                    $result = sprintf('Saving: %01.4f %%.', $subTotals['diff_pct']);
-                    $current->result($result);
+                    $consoleCurrentResult = sprintf('Saving: %01.4f %%.', $subTotals['diff_pct']);
+                    $consoleCurrentPadding->result($consoleCurrentResult);
 
                     $grandTotals['in']  += $subTotals['in'];
                     $grandTotals['out'] += $subTotals['out'];
-                    $grandTotals['optimized']++;
 
                     $history->setImageAsOptimized($filename);
+
+                    $grandTotals['optimized']++;
                 }
 
             } else {
 
-                $label   = sprintf('%d/%d: %s', $fileInfosCounter, $fileInfosCount, $filename);
-                $current = $padding->label($label);
-                $current->result('Skipped.');
+                $consoleLabel = $this->labelHelper($fileInfosCount, $fileInfosCounter, $filename);
+
+                $consolePadding->label($consoleLabel)->result('Skipped.');
 
                 $grandTotals['skipped']++;
             }
         }
 
-        $this->suffixGrandTotals($grandTotals, $fileInfosCount)
-             ->suffixBanner();
-    }
+        $this->consoleGrandTotals($grandTotals, $fileInfosCount);
 
-    protected function prefixBanner($fileInfosCount)
-    {
-        $console = $this->getConsole();
-
-        $console->clear()
-                ->br()
-                ->out(sprintf('Started at %s.', date('r')))
-                ->br()
-                ->out(sprintf('Found %d image file(s).', $fileInfosCount))
-                ->br();
+        $this->consoleBannerSuffix();
 
         return $this;
-    }
-
-    protected function suffixBanner()
-    {
-        $console = $this->getConsole();
-
-        $console->br()
-            ->out(sprintf('Finished at %s.', date('r')))
-            ->br();
-
-        return $this;
-    }
-
-    protected function suffixGrandTotals($grandTotals, $fileInfosCount)
-    {
-        $console = $this->getConsole();
-
-        $grandTotals['diff'] = $grandTotals['in'] - $grandTotals['out'];
-
-        if ($grandTotals['out'] > 0 && $grandTotals['in'] > 0) {
-            $grandTotals['diff_pct'] = 100 - ( ($grandTotals['out'] / $grandTotals['in']) * 100 );
-        }
-
-        $console->br()
-                ->out('Grand totals:')
-                ->br()
-                ->out(sprintf('  Total     : %d file(s)'       , $fileInfosCount)           )
-                ->br()
-                ->out(sprintf('  Optimized : %d file(s)'       , $grandTotals['optimized']) )
-                ->out(sprintf('  Skipped   : %d file(s)'       , $grandTotals['skipped'])   )
-                ->out(sprintf('  Indexed   : %d file(s)'       , $grandTotals['indexed'])   )
-                ->br()
-                ->out(sprintf('  In        : %d b'             , $grandTotals['in'])        )
-                ->out(sprintf('  Out       : %d b'             , $grandTotals['out'])       )
-                ->out(sprintf('  Diff      : %d b (%01.4f %%)' , $grandTotals['diff']
-                                                               , $grandTotals['diff_pct'])  );
-        return $this;
-    }
-
-    protected function getConsole()
-    {
-        if (null === $this->console) {
-            $this->console = new CLImate();
-        }
-
-        return $this->console;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    public function getIndexOnly()
-    {
-        return $this->indexOnly;
-    }
-
-    public function setIndexOnly($indexOnly)
-    {
-        $this->indexOnly = $indexOnly;
     }
 
 }

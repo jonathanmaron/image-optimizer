@@ -78,6 +78,7 @@ class Worker
     public function checkDependencies()
     {
         $commands = [
+            'tput'     => '/usr/bin/env tput               > /dev/null 2>&1',   // get terminal width
             'pngout'   => '/usr/bin/env pngout             > /dev/null 2>&1',
             'pngcrush' => '/usr/bin/env pngcrush           > /dev/null 2>&1',
             'jpegtran' => '/usr/bin/env jpegtran --version > /dev/null 2>&1',
