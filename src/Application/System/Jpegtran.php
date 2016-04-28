@@ -6,7 +6,11 @@ class Jpegtran extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {
-        return $this->checkDependencyHelper('jpegtran', '/usr/bin/env jpegtran --version > /dev/null 2>&1', self::DEPENDENCY_CHECK_METHOD_RETURN_VALUE);
+        $command     = 'jpegtran';
+        $exec        = '/usr/bin/env jpegtran --version > /dev/null 2>&1';
+        $checkMethod = self::DEPENDENCY_CHECK_METHOD_RETURN_VALUE;
+
+        return $this->checkDependencyHelper($command, $exec, $checkMethod);
     }
 
     public function optimize($filename)

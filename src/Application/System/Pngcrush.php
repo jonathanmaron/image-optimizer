@@ -6,7 +6,11 @@ class Pngcrush extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {
-        return $this->checkDependencyHelper('pngcrush', '/usr/bin/env pngcrush > /dev/null 2>&1', self::DEPENDENCY_CHECK_METHOD_RETURN_VALUE);
+        $command     = 'pngcrush';
+        $exec        = '/usr/bin/env pngcrush > /dev/null 2>&1';
+        $checkMethod = self::DEPENDENCY_CHECK_METHOD_RETURN_VALUE;
+
+        return $this->checkDependencyHelper($command, $exec, $checkMethod);
     }
 
     public function optimize($filename)

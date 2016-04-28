@@ -6,7 +6,11 @@ class Jpegoptim extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {
-        return $this->checkDependencyHelper('jpegoptim', '/usr/bin/jpegoptim', self::DEPENDENCY_CHECK_METHOD_EXECUTABLE);
+        $command     = 'jpegoptim';
+        $exec        = '/usr/bin/jpegoptim';
+        $checkMethod = self::DEPENDENCY_CHECK_METHOD_EXECUTABLE;
+
+        return $this->checkDependencyHelper($command, $exec, $checkMethod);
     }
 
     public function optimize($filename)
