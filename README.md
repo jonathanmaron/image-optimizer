@@ -49,6 +49,6 @@ then unpack, then copy to:
     
 Download and install other dependencies:
 
-    apt-get install pngcrush libjpeg-progs
+    apt-get install pngcrush libjpeg-progs jpegoptim
     
     

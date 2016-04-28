@@ -9,15 +9,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Application\History;
-use Application\Worker;
+use Application\Search\Images as ImagesSearch;
 
-class ImageOptimizer extends ImageOptimizerAbstract
+class ImageOptimizer extends AbstractImageOptimizer
 {
     protected function configure()
     {
         $this->setName('image-optimizer');
 
-        $this->setDescription("Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files from the CLI, using 'pngout', 'pngcrush' and 'jpegtran'.");
+        $this->setDescription("Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files, using a number of external tools, which must be installed.");
 
         $this->addArgument(
             'path',
@@ -31,14 +31,6 @@ class ImageOptimizer extends ImageOptimizerAbstract
             InputOption::VALUE_NONE,
             'Do not optimize images, just index them.'
         );
-
-        return $this;
-    }
-
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        $worker = new Worker();
-        $worker->checkDependencies();
 
         return $this;
     }
@@ -70,7 +62,7 @@ class ImageOptimizer extends ImageOptimizerAbstract
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $history = new History();
-        $worker  = new Worker();
+        $imagesSearch = new ImagesSearch();
 
         $consolePadding = $this->getConsole()->padding($this->getLinePadding());
 
@@ -84,7 +76,7 @@ class ImageOptimizer extends ImageOptimizerAbstract
             'diff_pct'  => 0,   // Difference as percent between 'in' and 'out'
         ];
 
-        $fileInfos        = $worker->searchForImageFiles($this->getPath());
+        $fileInfos        = $imagesSearch->getFileInfos($this->getPath());
         $fileInfosCount   = count($fileInfos);
         $fileInfosCounter = 0;
 
@@ -122,7 +114,7 @@ class ImageOptimizer extends ImageOptimizerAbstract
 
                 $consoleCurrentPadding = $consolePadding->label($consoleLabel);
 
-                if ($worker->optimizeImage($filename)) {
+                if ($this->optimizeImage($filename)) {
 
                     clearStatCache();
 

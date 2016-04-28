@@ -4,7 +4,12 @@ namespace Application\Command;
 
 use League\CLImate\CLImate as Console;
 
-abstract class ImageOptimizerAbstract extends Command
+use Application\System\Jpegtran;
+use Application\System\Jpegoptim;
+use Application\System\Pngcrush;
+use Application\System\Pngout;
+
+abstract class AbstractImageOptimizer extends AbstractCommand
 {
     /**
      * Default width of console, if console's width cannot be established
@@ -19,6 +24,26 @@ abstract class ImageOptimizerAbstract extends Command
     protected $console;
     protected $path;
     protected $indexOnly;
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    public function getIndexOnly()
+    {
+        return $this->indexOnly;
+    }
+
+    public function setIndexOnly($indexOnly)
+    {
+        $this->indexOnly = $indexOnly;
+    }
 
     protected function getConsole()
     {
@@ -40,26 +65,6 @@ abstract class ImageOptimizerAbstract extends Command
         }
 
         return $consoleWidth - self::MAXIMUM_RESULT_LENGTH;
-    }
-
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    public function getIndexOnly()
-    {
-        return $this->indexOnly;
-    }
-
-    public function setIndexOnly($indexOnly)
-    {
-        $this->indexOnly = $indexOnly;
     }
 
     protected function consoleBannerPrefix($fileInfosCount)
@@ -127,6 +132,50 @@ abstract class ImageOptimizerAbstract extends Command
         }
 
         return $prefix . $suffix;
+    }
+
+    /**
+     * Using System components (calls to actual CLI tools), optimize the passed filename.
+     *
+     * @param $filename
+     * @return bool
+     * @throws RuntimeException
+     */
+    protected function optimizeImage($filename)
+    {
+        $mode = fileperms($filename);
+
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower($extension);
+
+        switch ($extension) {
+
+            case 'png':
+                $optimizer = new Pngout();
+                $optimizer->optimize($filename);
+                $optimizer = new Pngcrush();
+                $optimizer->optimize($filename);
+            break;
+
+            case 'jpg':
+            case 'jpeg':
+                $optimizer = new Jpegtran();
+                $optimizer->optimize($filename);
+                $optimizer = new Jpegoptim();
+                $optimizer->optimize($filename);
+            break;
+
+            default:
+                throw new RuntimeException(
+                    "Unknown image file type - {$filename}"
+                );
+            break;
+
+        }
+
+        chmod($filename, $mode);
+
+        return true;
     }
 
 }
