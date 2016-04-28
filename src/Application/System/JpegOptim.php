@@ -2,7 +2,7 @@
 
 namespace Application\System;
 
-class Jpegoptim extends AbstractSystem implements InterfaceSystem
+class JpegOptim extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {

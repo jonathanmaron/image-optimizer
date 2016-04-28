@@ -4,10 +4,10 @@ namespace Application\Command;
 
 use League\CLImate\CLImate as Console;
 
-use Application\System\Jpegtran;
-use Application\System\Jpegoptim;
-use Application\System\Pngcrush;
-use Application\System\Pngout;
+use Application\System\JpegTran;
+use Application\System\JpegOptim;
+use Application\System\PngCrush;
+use Application\System\PngOut;
 
 abstract class AbstractImageOptimizer extends AbstractCommand
 {
@@ -151,17 +151,17 @@ abstract class AbstractImageOptimizer extends AbstractCommand
         switch ($extension) {
 
             case 'png':
-                $optimizer = new Pngout();
+                $optimizer = new PngOut();
                 $optimizer->optimize($filename);
-                $optimizer = new Pngcrush();
+                $optimizer = new PngCrush();
                 $optimizer->optimize($filename);
             break;
 
             case 'jpg':
             case 'jpeg':
-                $optimizer = new Jpegtran();
+                $optimizer = new JpegTran();
                 $optimizer->optimize($filename);
-                $optimizer = new Jpegoptim();
+                $optimizer = new JpegOptim();
                 $optimizer->optimize($filename);
             break;
 

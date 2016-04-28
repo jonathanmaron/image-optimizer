@@ -2,7 +2,7 @@
 
 namespace Application\System;
 
-class Jpegtran extends AbstractSystem implements InterfaceSystem
+class JpegTran extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {

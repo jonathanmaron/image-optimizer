@@ -2,7 +2,7 @@
 
 namespace Application\System;
 
-class Pngcrush extends AbstractSystem implements InterfaceSystem
+class PngCrush extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {

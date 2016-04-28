@@ -2,7 +2,7 @@
 
 namespace Application\System;
 
-class Pngout extends AbstractSystem implements InterfaceSystem
+class PngOut extends AbstractSystem implements InterfaceSystem
 {
     public function checkDependency()
     {
