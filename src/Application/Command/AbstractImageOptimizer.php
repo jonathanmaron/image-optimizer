@@ -3,6 +3,7 @@
 namespace Application\Command;
 
 use League\CLImate\CLImate as Console;
+use League\CLImate\Util\System\Linux;
 
 use Application\System\JpegTran;
 use Application\System\JpegOptim;
@@ -56,11 +57,11 @@ abstract class AbstractImageOptimizer extends AbstractCommand
 
     protected function getLinePadding()
     {
-        exec('/usr/bin/env tput cols', $output);
+        $linux = new Linux();
 
-        if (isset($output[0]) && $output[0] > 0) {
-            $consoleWidth = (integer) $output[0];
-        } else {
+        $consoleWidth = (integer) $linux->width();
+
+        if ($consoleWidth < 1) {
             $consoleWidth = self::DEFAULT_CONSOLE_WIDTH;
         }
 
