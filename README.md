@@ -30,8 +30,6 @@ It is recommended to include `~/bin` in your `PATH` variable:
 
     PATH=$PATH:~/install-path/image-optimizer/bin
     
-    export PATH
-    
 so that `image-optimizer.sh` is available to the logged in user globally. 
 
 
