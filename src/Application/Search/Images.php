@@ -10,13 +10,26 @@ use SplFileInfo;
 
 class Images extends AbstractSearch
 {
-    public function getFileInfos($path)
+    public function getFileInfos($directoryOrFilename)
+    {
+        $fileInfos = [];
+
+        if       ( is_dir($directoryOrFilename)) {
+            $fileInfos = $this->getFileInfosFromDirectory($directoryOrFilename);
+        } elseif (is_file($directoryOrFilename)) {
+            $fileInfos = $this->getFileInfosFromFilename ($directoryOrFilename);
+        }
+
+        return $fileInfos;
+    }
+
+    protected function getFileInfosFromDirectory($directory)
     {
         $fileInfos = [];
 
         $pattern = '/^.+(.jpe?g|.png)$/i';
 
-        $recursiveDirectoryIterator = new RecursiveDirectoryIterator($path);
+        $recursiveDirectoryIterator = new RecursiveDirectoryIterator($directory);
         $recursiveIteratorIterator  = new RecursiveIteratorIterator($recursiveDirectoryIterator);
         $regexIterator              = new RegexIterator($recursiveIteratorIterator, $pattern, RecursiveRegexIterator::GET_MATCH);
 
@@ -24,6 +37,16 @@ class Images extends AbstractSearch
             $fileInfo = new SplFileInfo($filename);
             array_push($fileInfos, $fileInfo);
         }
+
+        return $fileInfos;
+    }
+
+    protected function getFileInfosFromFilename($filename)
+    {
+        $fileInfos = [];
+
+        $fileInfo = new SplFileInfo($filename);
+        array_push($fileInfos, $fileInfo);
 
         return $fileInfos;
     }

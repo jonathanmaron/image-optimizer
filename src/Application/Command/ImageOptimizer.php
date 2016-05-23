@@ -42,7 +42,7 @@ class ImageOptimizer extends AbstractImageOptimizer
 
         if (false === $realPath) {
             throw new RuntimeException(
-                "The path '{$path}' does not exist."
+                "The path or file '{$path}' does not exist."
             );
         }
 
