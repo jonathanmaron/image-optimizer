@@ -15,7 +15,7 @@ class ImageOptimizer extends AbstractImageOptimizer
 {
     protected function configure()
     {
-        $this->setName('image-optimizer');
+        $this->setName('image-optimizer.php');
 
         $this->setDescription("Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files, using a number of external tools, which must be installed.");
 

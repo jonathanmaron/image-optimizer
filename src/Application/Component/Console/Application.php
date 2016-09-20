@@ -12,7 +12,7 @@ class Application extends ApplicationConsoleComponentSymfony
 
     protected function getCommandName(InputInterface $input)
     {
-        return 'image-optimizer';
+        return 'image-optimizer.php';
     }
 
     protected function getDefaultCommands()
