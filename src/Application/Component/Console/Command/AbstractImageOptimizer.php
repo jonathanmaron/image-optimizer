@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Command;
+namespace Application\Component\Console\Command;
 
 use League\CLImate\CLImate as Console;
 use League\CLImate\Util\System\Linux;

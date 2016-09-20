@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Command;
+namespace Application\Component\Console\Command;
 
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
