@@ -73,11 +73,11 @@ abstract class AbstractImageOptimizer extends AbstractCommand
         $console = $this->getConsole();
 
         $console->clear()
-            ->br()
-            ->out(sprintf('Started at %s.', date('r')))
-            ->br()
-            ->out(sprintf('Found %d image file(s).', $fileInfosCount))
-            ->br();
+                ->br()
+                ->out(sprintf('Started at %s.', date('r')))
+                ->br()
+                ->out(sprintf('Found %d image file(s).', $fileInfosCount))
+                ->br();
 
         return $this;
     }
@@ -87,8 +87,8 @@ abstract class AbstractImageOptimizer extends AbstractCommand
         $console = $this->getConsole();
 
         $console->br()
-            ->out(sprintf('Finished at %s.', date('r')))
-            ->br();
+                ->out(sprintf('Finished at %s.', date('r')))
+                ->br();
 
         return $this;
     }
@@ -104,18 +104,18 @@ abstract class AbstractImageOptimizer extends AbstractCommand
         }
 
         $console->br()
-            ->out('Grand totals:')
-            ->br()
-            ->out(sprintf('  Total     : %d file(s)'       , $fileInfosCount)           )
-            ->br()
-            ->out(sprintf('  Optimized : %d file(s)'       , $grandTotals['optimized']) )
-            ->out(sprintf('  Skipped   : %d file(s)'       , $grandTotals['skipped'])   )
-            ->out(sprintf('  Indexed   : %d file(s)'       , $grandTotals['indexed'])   )
-            ->br()
-            ->out(sprintf('  In        : %d b'             , $grandTotals['in'])        )
-            ->out(sprintf('  Out       : %d b'             , $grandTotals['out'])       )
-            ->out(sprintf('  Diff      : %d b (%01.4f %%)' , $grandTotals['diff']
-                , $grandTotals['diff_pct'])  );
+                ->out('Grand totals:')
+                ->br()
+                ->out(sprintf('  Total     : %d file(s)'       , $fileInfosCount)           )
+                ->br()
+                ->out(sprintf('  Optimized : %d file(s)'       , $grandTotals['optimized']) )
+                ->out(sprintf('  Skipped   : %d file(s)'       , $grandTotals['skipped'])   )
+                ->out(sprintf('  Indexed   : %d file(s)'       , $grandTotals['indexed'])   )
+                ->br()
+                ->out(sprintf('  In        : %d b'             , $grandTotals['in'])        )
+                ->out(sprintf('  Out       : %d b'             , $grandTotals['out'])       )
+                ->out(sprintf('  Diff      : %d b (%01.4f %%)' , $grandTotals['diff'], $grandTotals['diff_pct'])  );
+
         return $this;
     }
 
