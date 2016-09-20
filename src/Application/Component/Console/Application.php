@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Component\Console\Application;
+namespace Application\Component\Console;
 
 use Application\Component\Console\Command\ImageOptimizer;
 use Symfony\Component\Console\Application as ApplicationConsoleComponentSymfony;
