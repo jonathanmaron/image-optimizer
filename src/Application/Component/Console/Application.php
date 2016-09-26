@@ -2,7 +2,7 @@
 
 namespace Application\Component\Console;
 
-use Application\Component\Console\Command\ImageOptimizer;
+use Application\Component\Console\Command\Command;
 use Symfony\Component\Console\Application as ApplicationConsoleComponentSymfony;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -17,8 +17,11 @@ class Application extends ApplicationConsoleComponentSymfony
 
     protected function getDefaultCommands()
     {
-        $defaultCommands   = parent::getDefaultCommands();
-        $defaultCommands[] = new ImageOptimizer();
+        $command = new Command();
+
+        $defaultCommands = parent::getDefaultCommands();
+
+        array_push($defaultCommands, $command);
 
         return $defaultCommands;
     }

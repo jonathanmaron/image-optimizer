@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Application\History;
 use Application\Search\Images as ImagesSearch;
 
-class ImageOptimizer extends AbstractImageOptimizer
+class Command extends AbstractCommand
 {
     protected function configure()
     {
