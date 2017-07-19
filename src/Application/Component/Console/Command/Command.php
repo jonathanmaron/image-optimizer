@@ -16,7 +16,7 @@ class Command extends AbstractCommand
     {
         $this->setName('image-optimizer.php');
 
-        $this->setDescription("Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files, using a number of external tools, which must be installed.");
+        $this->setDescription("Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files, using a number of external tools, which must be installed.");
 
         $this->addArgument(
             'path',
@@ -29,6 +29,13 @@ class Command extends AbstractCommand
             null,
             InputOption::VALUE_NONE,
             'Do not optimize images, just index them.'
+        );
+
+        $this->addOption(
+            'force',
+            null,
+            InputOption::VALUE_NONE,
+            'Always optimize images, ignoring history.'
         );
 
         return $this;
@@ -54,6 +61,14 @@ class Command extends AbstractCommand
         }
 
         $this->setIndexOnly($indexOnly);
+
+        if ($input->getOption('force')) {
+            $force = true;
+        } else {
+            $force = false;
+        }
+
+        $this->setForce($force);
 
         return $this;
     }
@@ -100,7 +115,7 @@ class Command extends AbstractCommand
                 continue;
             }
 
-            if ($history->isUnoptimizedImage($filename)) {
+            if ($this->getForce() || $history->isUnoptimizedImage($filename)) {
 
                 $subTotals = [
                     'in'       => filesize($filename), // Number of bytes before optimization

@@ -28,6 +28,7 @@ abstract class AbstractCommand extends SymfonyComponentConsoleCommandCommand
     protected $console;
     protected $path;
     protected $indexOnly;
+    protected $force;
 
     public function getPath()
     {
@@ -47,6 +48,18 @@ abstract class AbstractCommand extends SymfonyComponentConsoleCommandCommand
     public function setIndexOnly($indexOnly)
     {
         $this->indexOnly = $indexOnly;
+    }
+
+    public function getForce()
+    {
+        return $this->force;
+    }
+
+    public function setForce($force)
+    {
+        $this->force = $force;
+
+        return $this;
     }
 
     protected function getConsole()

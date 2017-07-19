@@ -16,6 +16,10 @@ As optimzing images is CPU intensive and it may take several minutes for a large
 ### Set all images in ~/web-project/public as optimized
 
     image-optimizer.php ~/web-project/public --index-only
+    
+### Always optimize images in ~/web-project/public, ignoring history
+
+    image-optimizer.php ~/web-project/public --force    
 
 
 ## Installation
