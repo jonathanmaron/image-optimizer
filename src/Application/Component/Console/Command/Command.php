@@ -2,14 +2,13 @@
 
 namespace Application\Component\Console\Command;
 
+use Application\History;
+use Application\Search\Images as ImagesSearch;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use Application\History;
-use Application\Search\Images as ImagesSearch;
 
 class Command extends AbstractCommand
 {
@@ -61,7 +60,7 @@ class Command extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $history = new History();
+        $history      = new History();
         $imagesSearch = new ImagesSearch();
 
         $consolePadding = $this->getConsole()->padding($this->getLinePadding());

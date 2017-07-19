@@ -6,6 +6,6 @@ interface InterfaceSystem
 {
     public function optimize($filename);
 
-    public function checkDependency();
+    public function isInstalled($exec);
 }
 

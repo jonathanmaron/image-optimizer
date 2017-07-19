@@ -9,6 +9,7 @@ use Application\System\JpegTran;
 use Application\System\JpegOptim;
 use Application\System\PngCrush;
 use Application\System\PngOut;
+use Application\System\GifSicle;
 
 use Symfony\Component\Console\Command\Command as SymfonyComponentConsoleCommandCommand;
 
@@ -167,6 +168,11 @@ abstract class AbstractCommand extends SymfonyComponentConsoleCommandCommand
                 $optimizer = new JpegOptim();
                 $optimizer->optimize($filename);
             break;
+
+            case 'gif':
+                $optimizer = new GifSicle();
+                $optimizer->optimize($filename);
+                break;
 
             default:
                 throw new RuntimeException(

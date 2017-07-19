@@ -27,7 +27,7 @@ class Images extends AbstractSearch
     {
         $fileInfos = [];
 
-        $pattern = '/^.+(.jpe?g|.png)$/i';
+        $pattern = '/^.+(.jpe?g|.png|.gif)$/i';
 
         $recursiveDirectoryIterator = new RecursiveDirectoryIterator($directory);
         $recursiveIteratorIterator  = new RecursiveIteratorIterator($recursiveDirectoryIterator);

@@ -2,9 +2,9 @@
 
 namespace Application\System;
 
-class PngCrush extends AbstractSystem implements InterfaceSystem
+class GifSicle extends AbstractSystem implements InterfaceSystem
 {
-    const EXEC = '/usr/bin/pngcrush';
+    const EXEC = '/usr/bin/gifsicle';
 
     public function __construct()
     {
@@ -15,8 +15,10 @@ class PngCrush extends AbstractSystem implements InterfaceSystem
     {
         $tempFilename = $this->getTempFilename();
 
-        $format = '%s -rem alla -brute -reduce %s %s > /dev/null 2>&1';
+        $format = '%s -O3 %s -o %s > /dev/null 2>&1';
         $exec   = sprintf($format, escapeshellcmd(self::EXEC), escapeshellarg($filename), escapeshellarg($tempFilename));
         exec($exec);
+
+        rename($tempFilename, $filename);
     }
 }

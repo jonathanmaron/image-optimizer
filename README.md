@@ -1,7 +1,7 @@
 
 # image-optimizer.php
 
-Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files from the CLI, using `pngout`, `pngcrush` and `jpegtran` and can usually reduce the filesize by 10% to 70%.
+Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files from the CLI, using `pngout`, `pngcrush`, `jpegtran` and `gifsicle` and can usually reduce the filesize by 10% to 70%.
 
 As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer.php` keeps track of which image files it has optimized. Each image file will only be optimize once.
 
@@ -47,6 +47,6 @@ then unpack, then copy to:
     
 Download and install other dependencies:
 
-    apt-get install pngcrush libjpeg-progs jpegoptim
+    apt-get install pngcrush libjpeg-progs jpegoptim gifsicle
     
     
