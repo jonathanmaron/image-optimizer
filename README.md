@@ -3,7 +3,7 @@
 
 Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files from the CLI, using `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` and can usually reduce the filesize by 10% to 70%.
 
-As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer.php` keeps track of which image files it has optimized. Each image file will only be optimize once.
+As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer.php` keeps track of which image files it has optimized. Each image file will only be optimize once, unless the `--force` flag is set.
 
 `image-optimizer.php` is intended to be run unattended in a cronjob.
 
