@@ -18,5 +18,7 @@ class PngCrush extends AbstractSystem implements InterfaceSystem
         $format = '%s -rem alla -brute -reduce %s %s > /dev/null 2>&1';
         $exec   = sprintf($format, escapeshellcmd(self::EXEC), escapeshellarg($filename), escapeshellarg($tempFilename));
         exec($exec);
+
+        rename($tempFilename, $filename);
     }
 }
