@@ -9,37 +9,71 @@ use Application\System\JpegOptim;
 use Application\System\JpegTran;
 use Application\System\PngCrush;
 use Application\System\PngOut;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Optimizer
 {
+    /**
+     * PNG image filename extension
+     */
+    private const EXTENSION_PNG = 'png';
+
+    /**
+     * JPG image filename extension
+     */
+    private const EXTENSION_JPG = 'jpg';
+
+    /**
+     * JPEG image filename extension
+     */
+    private const EXTENSION_JPEG = 'jpeg';
+
+    /**
+     * GIF image filename extension
+     */
+    private const EXTENSION_GIF = 'gif';
+
+    /**
+     * Optimize an image filename
+     *
+     * @param string $filename
+     *
+     * @return bool
+     */
     public function optimizeImage(string $filename): bool
     {
+        $filesystem = new Filesystem();
+
         $mode      = fileperms($filename);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
+
         switch ($extension) {
-            case 'png':
+            case self::EXTENSION_PNG:
                 $optimizer = new PngOut();
                 $optimizer->optimize($filename);
                 $optimizer = new PngCrush();
                 $optimizer->optimize($filename);
                 break;
-            case 'jpg':
-            case 'jpeg':
+            case self::EXTENSION_JPG:
+            case self::EXTENSION_JPEG:
                 $optimizer = new JpegTran();
                 $optimizer->optimize($filename);
                 $optimizer = new JpegOptim();
                 $optimizer->optimize($filename);
                 break;
-            case 'gif':
+            case self::EXTENSION_GIF:
                 $optimizer = new GifSicle();
                 $optimizer->optimize($filename);
                 break;
             default:
-                throw new RuntimeException("Unknown image file type - {$filename}");
+                $format  = 'Unsupported image file type "%s"';
+                $message = sprintf($format, $filename);
+                throw new RuntimeException($message);
                 break;
         }
-        chmod($filename, $mode);
+
+        $filesystem->chmod($filename, $mode);
 
         return true;
     }

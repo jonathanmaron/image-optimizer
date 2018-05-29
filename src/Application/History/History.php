@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Application\History;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class History
 {
     private const HASH_DIRECTORY_DEPTH = 5;
+
+    private const HASH_ALGORITHM       = 'sha256';
 
     /**
      * Mark the image filename as 'optimized', by saving a hash of the contents of the file in the history directory
@@ -16,17 +20,18 @@ class History
      */
     public function setImageAsOptimized(string $filename): bool
     {
-        $hash     = $this->getHash($filename);
-        $hashFile = $this->getHashFile($filename);
+        $filesystem = new Filesystem();
 
+        $hash         = $this->getHash($filename);
+        $hashFile     = $this->getHashFile($filename);
         $hashFilename = $this->getHashFilename($hash);
         $hashPath     = dirname($hashFilename);
 
-        if (!is_dir($hashPath)) {
-            mkdir($hashPath, 0700, true);
+        if (!$filesystem->exists($hashPath)) {
+            $filesystem->mkdir($hashPath, 0700);
         }
 
-        file_put_contents($hashFilename, $hashFile);
+        $filesystem->dumpFile($hashFilename, $hashFile);
 
         return true;
     }
@@ -40,7 +45,7 @@ class History
      */
     public function getHash(string $filename): string
     {
-        return hash('sha256', $filename);
+        return hash(self::HASH_ALGORITHM, $filename);
     }
 
     /**
@@ -52,7 +57,7 @@ class History
      */
     public function getHashFile(string $filename): string
     {
-        return hash_file('sha256', $filename);
+        return hash_file(self::HASH_ALGORITHM, $filename);
     }
 
     /**
@@ -82,10 +87,12 @@ class History
      */
     public function getBasePath(): string
     {
+        $filesystem = new Filesystem();
+
         $ret = getenv('HOME') . DIRECTORY_SEPARATOR . '.image_optimizer';
 
-        if (!is_dir($ret)) {
-            mkdir($ret, 0700, true);
+        if (!$filesystem->exists($ret)) {
+            $filesystem->mkdir($ret, 0700);
         }
 
         return $ret;
@@ -102,10 +109,12 @@ class History
     {
         $ret = true;
 
+        $filesystem = new Filesystem();
+
         $hash         = $this->getHash($filename);
         $hashFilename = $this->getHashFilename($hash);
 
-        if (is_readable($hashFilename)) {
+        if ($filesystem->exists($hashFilename)) {
             clearStatCache();
             $hashFile = file_get_contents($hashFilename);
             if ($hashFile === $this->getHashFile($filename)) {

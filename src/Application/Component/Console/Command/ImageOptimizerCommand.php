@@ -21,7 +21,7 @@ class ImageOptimizerCommand extends AbstractCommand
         $this->setName('image-optimizer');
 
         $description = 'Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files, ';
-        $description .= 'using a number of external tools, which must be installed.';
+        $description .= 'using a number of external toolsthat must be installed.';
 
         $this->setDescription($description);
 
@@ -86,25 +86,31 @@ class ImageOptimizerCommand extends AbstractCommand
         $optimizer = new Optimizer();
 
         $grandTotals = [
-            'skipped'   => 0,   // Number of image files, which have been skipped
-            'optimized' => 0,   // Number of image files, which have been optimized
-            'indexed'   => 0,   // Number of image files, which have been indexed
-            'in'        => 0,   // Total number of bytes before optimization
-            'out'       => 0,   // Total number of bytes after optimization
-            'diff'      => 0,   // Difference in bytes between 'in' and 'out'
-            'diff_pct'  => 0,   // Difference as percent between 'in' and 'out'
+            'skipped'   => 0, // Number of image files that have been skipped
+            'optimized' => 0, // Number of image files that have been optimized
+            'indexed'   => 0, // Number of image files that have been indexed
+            'in'        => 0, // Total number of bytes before optimization
+            'out'       => 0, // Total number of bytes after optimization
+            'diff'      => 0, // Difference in bytes between 'in' and 'out'
+            'diff_pct'  => 0, // Difference as percent between 'in' and 'out'
         ];
 
-        $finder    = $finder->in($this->getPath());
-        $filenames = $finder->filenames();
-        $count     = count($filenames);
-        $counter   = 0;
+        $finder  = $finder->in($this->getPath());
+        $count   = $finder->count();
+        $counter = 0;
 
-        foreach ($filenames as $filename) {
+        $format  = 'Found %d %s';
+        $message = sprintf($format, $count, (1 == $count) ? 'file' : 'files');
+        $output->writeln($message);
+        $output->writeln('');
+
+        foreach ($finder->filenames() as $fileInfo) {
+
+            $filename = $fileInfo->getPathname();
 
             $counter++;
 
-            $format  = "[%s/%d] Processing %s... ";
+            $format  = '[%s/%d] Processing "%s"... ';
             $message = sprintf($format, $counter, $count, $filename);
             $output->write($message);
 
@@ -155,19 +161,7 @@ class ImageOptimizerCommand extends AbstractCommand
             $grandTotals['skipped']++;
         }
 
-        $messages = [
-            '',
-            sprintf('Total     : %d file(s)', $count),
-            '',
-            sprintf('Optimized : %d file(s)', $grandTotals['optimized']),
-            sprintf('Skipped   : %d file(s)', $grandTotals['skipped']),
-            sprintf('Indexed   : %d file(s)', $grandTotals['indexed']),
-            '',
-            sprintf('In        : %d b', $grandTotals['in']),
-            sprintf('Out       : %d b', $grandTotals['out']),
-            sprintf('Diff      : %d b (%01.4f %%)', $grandTotals['diff'], $grandTotals['diff_pct']),
-        ];
-        $output->writeLn($messages);
+        $this->bannerGrandTotals($input, $output, $grandTotals, $count);
 
         return $this;
     }

@@ -65,7 +65,7 @@ abstract class AbstractCommand extends ParentCommand
         return $this;
     }
 
-    private function banner(InputInterface $input, OutputInterface $output, $type): self
+    protected function banner(InputInterface $input, OutputInterface $output, string $type): self
     {
         $timestamp = time();
         $execution = microtime(true) - REQUEST_MICROTIME;
@@ -98,4 +98,33 @@ abstract class AbstractCommand extends ParentCommand
 
         return $this;
     }
+
+    protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, array $totals, int $count): self
+    {
+        $noun = function ($count) {
+            return (1 == $count) ? 'file' : 'files';
+        };
+
+        $totals['diff'] = $totals['in'] - $totals['out'];
+        if ($totals['out'] > 0 && $totals['in'] > 0) {
+            $totals['diff_pct'] = 100 - (($totals['out'] / $totals['in']) * 100);
+        }
+
+        $messages = [
+            '',
+            sprintf('Total     : %d %s', $count, $noun($count)),
+            '',
+            sprintf('Optimized : %d %s', $totals['optimized'], $noun($totals['optimized'])),
+            sprintf('Skipped   : %d %s', $totals['skipped'], $noun($totals['skipped'])),
+            sprintf('Indexed   : %d %s', $totals['indexed'], $noun($totals['indexed'])),
+            '',
+            sprintf('In        : %d b', $totals['in']),
+            sprintf('Out       : %d b', $totals['out']),
+            sprintf('Diff      : %d b (%01.4f %%)', $totals['diff'], $totals['diff_pct']),
+        ];
+        $output->writeLn($messages);
+
+        return $this;
+    }
+
 }

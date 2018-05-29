@@ -15,7 +15,10 @@ class PngOut extends AbstractSystem implements InterfaceSystem
     public function optimize(string $filename): bool
     {
         $format = '%s %s -s0 > /dev/null 2>&1';
-        $exec   = sprintf($format, escapeshellcmd(self::EXEC), escapeshellarg($filename));
+        $exec   = sprintf($format
+            , escapeshellcmd(self::EXEC)
+            , escapeshellarg($filename)
+        );
         exec($exec);
 
         return true;

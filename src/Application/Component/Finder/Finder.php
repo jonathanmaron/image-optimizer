@@ -7,23 +7,36 @@ use Symfony\Component\Finder\Finder as ParentFinder;
 
 class Finder extends ParentFinder
 {
-    public function filenames(): array
+    /**
+     * Patterns that match image filenames
+     */
+    private const PATTERNS
+        = [
+            '*.jpg',
+            '*.JPG',
+            '*.jpeg',
+            '*.JPEG',
+            '*.png',
+            '*.PNG',
+            '*.gif',
+            '*.GIF',
+        ];
+
+    /**
+     * Return image filenames
+     *
+     * @return Finder
+     */
+    public function filenames(): self
     {
-        $ret = [];
+        $finder = $this->files();
 
-        $files = $this->files();
-
-        $files->name('*.jpg');
-        $files->name('*.jpeg');
-        $files->name('*.png');
-        $files->name('*.gif');
-
-        foreach ($files as $fileInfo) {
-            $ret[] = $fileInfo->getPathname();
+        foreach (self::PATTERNS as $pattern) {
+            $finder->name($pattern);
         }
 
-        sort($ret, SORT_NATURAL);
+        $finder->sortByName();
 
-        return $ret;
+        return $finder;
     }
 }
