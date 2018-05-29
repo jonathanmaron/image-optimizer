@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Application\System;
 
@@ -6,7 +7,7 @@ use Symfony\Component\Console\Exception\RuntimeException;
 
 abstract class AbstractSystem
 {
-    public function isInstalled($exec)
+    public function isInstalled(string $exec): bool
     {
         if (!is_executable($exec)) {
             $message = sprintf("The required command '%s' is not installed.", $exec);
@@ -16,7 +17,7 @@ abstract class AbstractSystem
         return true;
     }
 
-    public function getTempFilename()
+    public function getTempFilename(): string
     {
         $path = sys_get_temp_dir();
 

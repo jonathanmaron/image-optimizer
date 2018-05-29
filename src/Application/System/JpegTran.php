@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Application\System;
 
@@ -11,7 +12,7 @@ class JpegTran extends AbstractSystem implements InterfaceSystem
         $this->isInstalled(self::EXEC);
     }
 
-    public function optimize($filename)
+    public function optimize(string $filename): bool
     {
         $tempFilename = $this->getTempFilename();
 
@@ -20,5 +21,7 @@ class JpegTran extends AbstractSystem implements InterfaceSystem
         exec($exec);
 
         rename($tempFilename, $filename);
+
+        return true;
     }
 }

@@ -1,203 +1,98 @@
 <?php
+declare(strict_types=1);
 
 namespace Application\Component\Console\Command;
 
-use League\CLImate\CLImate as Console;
-use League\CLImate\Util\System\Linux;
+use Application\Exception\RuntimeException;
+use Symfony\Component\Console\Command\Command as ParentCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-use Application\System\JpegTran;
-use Application\System\JpegOptim;
-use Application\System\PngCrush;
-use Application\System\PngOut;
-use Application\System\GifSicle;
-
-use Symfony\Component\Console\Command\Command as SymfonyComponentConsoleCommandCommand;
-
-abstract class AbstractCommand extends SymfonyComponentConsoleCommandCommand
+abstract class AbstractCommand extends ParentCommand
 {
-    /**
-     * Default width of console, if console's width cannot be established
-     */
-    const DEFAULT_CONSOLE_WIDTH = 120;
+    private const BANNER_START = 'banner_start';
 
-    /**
-     * Maximum length of 'result' part of line. Typical value of 'result' is 'Saving: 4.1887 %.'
-     */
-    const MAXIMUM_RESULT_LENGTH =  20;
+    private const BANNER_END   = 'banner_end';
 
-    protected $console;
-    protected $path;
-    protected $indexOnly;
-    protected $force;
+    private $path      = '';
 
-    public function getPath()
+    private $indexOnly = false;
+
+    private $force     = false;
+
+    public function getPath(): string
     {
         return $this->path;
     }
 
-    public function setPath($path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
+
+        return $this;
     }
 
-    public function getIndexOnly()
+    public function getIndexOnly(): bool
     {
         return $this->indexOnly;
     }
 
-    public function setIndexOnly($indexOnly)
+    public function setIndexOnly(bool $indexOnly): self
     {
         $this->indexOnly = $indexOnly;
+
+        return $this;
     }
 
-    public function getForce()
+    public function getForce(): bool
     {
         return $this->force;
     }
 
-    public function setForce($force)
+    public function setForce(bool $force): self
     {
         $this->force = $force;
 
         return $this;
     }
 
-    protected function getConsole()
+    protected function execute(InputInterface $input, OutputInterface $output): self
     {
-        if (null === $this->console) {
-            $this->console = new Console();
-        }
-
-        return $this->console;
-    }
-
-    protected function getLinePadding()
-    {
-        $linux = new Linux();
-
-        $consoleWidth = (integer) $linux->width();
-
-        if ($consoleWidth < 1) {
-            $consoleWidth = self::DEFAULT_CONSOLE_WIDTH;
-        }
-
-        return $consoleWidth - self::MAXIMUM_RESULT_LENGTH;
-    }
-
-    protected function consoleBannerPrefix($fileInfosCount)
-    {
-        $console = $this->getConsole();
-
-        $console->clear()
-                ->br()
-                ->out(sprintf('Started at %s.', date('r')))
-                ->br()
-                ->out(sprintf('Found %d image file(s).', $fileInfosCount))
-                ->br();
+        $this->banner($input, $output, self::BANNER_START);
+        $this->main($input, $output);
+        $this->banner($input, $output, self::BANNER_END);
 
         return $this;
     }
 
-    protected function consoleBannerSuffix()
+    private function banner(InputInterface $input, OutputInterface $output, $type): self
     {
-        $console = $this->getConsole();
+        $timestamp = time();
+        $execution = microtime(true) - REQUEST_MICROTIME;
+        $lines     = [];
 
-        $console->br()
-                ->out(sprintf('Finished at %s.', date('r')))
-                ->br();
-
-        return $this;
-    }
-
-    protected function consoleGrandTotals($grandTotals, $fileInfosCount)
-    {
-        $console = $this->getConsole();
-
-        $grandTotals['diff'] = $grandTotals['in'] - $grandTotals['out'];
-
-        if ($grandTotals['out'] > 0 && $grandTotals['in'] > 0) {
-            $grandTotals['diff_pct'] = 100 - ( ($grandTotals['out'] / $grandTotals['in']) * 100 );
-        }
-
-        $console->br()
-                ->out('Grand totals:')
-                ->br()
-                ->out(sprintf('  Total     : %d file(s)'       , $fileInfosCount)           )
-                ->br()
-                ->out(sprintf('  Optimized : %d file(s)'       , $grandTotals['optimized']) )
-                ->out(sprintf('  Skipped   : %d file(s)'       , $grandTotals['skipped'])   )
-                ->out(sprintf('  Indexed   : %d file(s)'       , $grandTotals['indexed'])   )
-                ->br()
-                ->out(sprintf('  In        : %d b'             , $grandTotals['in'])        )
-                ->out(sprintf('  Out       : %d b'             , $grandTotals['out'])       )
-                ->out(sprintf('  Diff      : %d b (%01.4f %%)' , $grandTotals['diff'], $grandTotals['diff_pct'])  );
-
-        return $this;
-    }
-
-    protected function labelHelper($fileInfosCount, $fileInfosCounter, $filename)
-    {
-        $ellipsis    = '/[..]';
-        $prefix      = sprintf('%d/%d: ', $fileInfosCounter, $fileInfosCount);
-        $labelLength = strlen($prefix) + strlen($filename);
-
-        if ($labelLength > $this->getLinePadding()) {
-            $start  = $this->getLinePadding() - strlen($prefix) - strlen($ellipsis);
-            $suffix = $ellipsis . substr($filename, -$start);
-        } else {
-            $suffix = $filename;
-        }
-
-        return $prefix . $suffix;
-    }
-
-    /**
-     * Using System components (calls to actual CLI tools), optimize the passed filename.
-     *
-     * @param $filename
-     * @return bool
-     * @throws RuntimeException
-     */
-    protected function optimizeImage($filename)
-    {
-        $mode = fileperms($filename);
-
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $extension = strtolower($extension);
-
-        switch ($extension) {
-
-            case 'png':
-                $optimizer = new PngOut();
-                $optimizer->optimize($filename);
-                $optimizer = new PngCrush();
-                $optimizer->optimize($filename);
-            break;
-
-            case 'jpg':
-            case 'jpeg':
-                $optimizer = new JpegTran();
-                $optimizer->optimize($filename);
-                $optimizer = new JpegOptim();
-                $optimizer->optimize($filename);
-            break;
-
-            case 'gif':
-                $optimizer = new GifSicle();
-                $optimizer->optimize($filename);
+        switch ($type) {
+            case self::BANNER_START:
+                $command = $input->getArgument('command');
+                $lines[] = '';
+                $lines[] = sprintf('## Command    : %s', $command);
+                $lines[] = sprintf('## Start time : %s', date('r', $timestamp));
+                $lines[] = '';
+                $output->writeln($lines);
                 break;
-
+            case self::BANNER_END:
+                $lines[] = '';
+                $lines[] = sprintf('## End time       : %s', date('r', $timestamp));
+                $lines[] = sprintf('## Execution time : %0.4f s', $execution);
+                $lines[] = '';
+                $output->writeln($lines);
+                break;
             default:
-                throw new RuntimeException(
-                    "Unknown image file type - {$filename}"
-                );
-            break;
-
+                $message = 'Invalid banner type';
+                throw new RuntimeException($message);
+                break;
         }
 
-        chmod($filename, $mode);
-
-        return true;
+        return $this;
     }
-
 }

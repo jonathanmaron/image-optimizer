@@ -1,45 +1,45 @@
 
-# image-optimizer.php
+# image-optimizer
 
 Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files from the CLI, using `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` and can usually reduce the filesize by 10% to 70%.
 
-As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer.php` keeps track of which image files it has optimized. Each image file will only be optimize once, unless the `--force` flag is set.
+As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer` keeps track of which image files it has optimized. Each image file will only be optimize once, unless the `--force` flag is set.
 
-`image-optimizer.php` is intended to be run unattended in a cronjob.
+`image-optimizer` is intended to be run unattended in a cronjob.
 
 ## Example usage
 
 ### Optimize images in ~/web-project/public
 
-    image-optimizer.php ~/web-project/public
-    
+    image-optimizer --path="~/web-project/public"
+
 ### Optimize images in ~/web-project/public, ignoring history
 
-    image-optimizer.php ~/web-project/public --force    
-        
+    image-optimizer --path="~/web-project/public" --force
+
 ### Set all images in ~/web-project/public as optimized
 
-    image-optimizer.php ~/web-project/public --index-only   
+    image-optimizer --path="~/web-project/public" --index-only
 
 
 ## Installation
 
 Installation is via composer:
-    
+
     cd ~/install-path
-    
+
     composer create-project jonathanmaron/image-optimizer
-    
+
 It is recommended to include `~/bin` in your `PATH` variable:
 
     PATH=$PATH:~/install-path/image-optimizer/bin
-    
-so that `image-optimizer.php` is available to the logged in user globally. 
+
+so that `image-optimizer` is available to the logged in user globally.
 
 
 ### Dependencies
 
-`image-optimizer.php` depends upon `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` to perform its work. These tools must be installed, otherwise `image-optimizer.php` will return an error.
+`image-optimizer` depends upon `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` to perform its work. These tools must be installed, otherwise `image-optimizer` will return an error.
 
 Download and install `pngout` at:
 
@@ -48,9 +48,9 @@ Download and install `pngout` at:
 then unpack, then copy to:
 
     /usr/bin/pngout
-    
+
 Download and install other dependencies:
 
     apt-get install pngcrush libjpeg-progs jpegoptim gifsicle
-    
-    
+
+
