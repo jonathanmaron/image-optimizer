@@ -96,17 +96,16 @@ class ImageOptimizerCommand extends AbstractCommand
         ];
 
         $finder    = $finder->in($this->getPath());
-        $fileInfos = $finder->images();
+        $filenames = $finder->filenames();
+        $count     = count($filenames);
+        $counter   = 0;
 
-        $counter = 0;
-
-        foreach ($fileInfos as $fileInfo) {
+        foreach ($filenames as $filename) {
 
             $counter++;
-            $filename = $fileInfo->getPathname();
 
             $format  = "[%s/%d] Processing %s... ";
-            $message = sprintf($format, $counter, $fileInfos->count(), $filename);
+            $message = sprintf($format, $counter, $count, $filename);
             $output->write($message);
 
             if ($this->getIndexOnly()) {
@@ -158,7 +157,7 @@ class ImageOptimizerCommand extends AbstractCommand
 
         $messages = [
             '',
-            sprintf('Total     : %d file(s)', $fileInfos->count()),
+            sprintf('Total     : %d file(s)', $count),
             '',
             sprintf('Optimized : %d file(s)', $grandTotals['optimized']),
             sprintf('Skipped   : %d file(s)', $grandTotals['skipped']),

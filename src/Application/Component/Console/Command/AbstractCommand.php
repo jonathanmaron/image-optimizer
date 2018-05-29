@@ -69,23 +69,26 @@ abstract class AbstractCommand extends ParentCommand
     {
         $timestamp = time();
         $execution = microtime(true) - REQUEST_MICROTIME;
-        $lines     = [];
 
         switch ($type) {
             case self::BANNER_START:
-                $command = $input->getArgument('command');
-                $lines[] = '';
-                $lines[] = sprintf('## Command    : %s', $command);
-                $lines[] = sprintf('## Start time : %s', date('r', $timestamp));
-                $lines[] = '';
-                $output->writeln($lines);
+                $command  = $input->getArgument('command');
+                $messages = [
+                    '',
+                    sprintf('## Command    : %s', $command),
+                    sprintf('## Start time : %s', date('r', $timestamp)),
+                    '',
+                ];
+                $output->writeln($messages);
                 break;
             case self::BANNER_END:
-                $lines[] = '';
-                $lines[] = sprintf('## End time       : %s', date('r', $timestamp));
-                $lines[] = sprintf('## Execution time : %0.4f s', $execution);
-                $lines[] = '';
-                $output->writeln($lines);
+                $messages = [
+                    '',
+                    sprintf('## End time       : %s', date('r', $timestamp)),
+                    sprintf('## Execution time : %0.4f s', $execution),
+                    '',
+                ];
+                $output->writeln($messages);
                 break;
             default:
                 $message = 'Invalid banner type';
