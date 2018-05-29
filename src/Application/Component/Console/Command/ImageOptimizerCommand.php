@@ -99,11 +99,6 @@ class ImageOptimizerCommand extends AbstractCommand
         $count   = $finder->count();
         $counter = 0;
 
-        $format  = 'Found %d %s';
-        $message = sprintf($format, $count, (1 == $count) ? 'file' : 'files');
-        $output->writeln($message);
-        $output->writeln('');
-
         foreach ($finder->filenames() as $fileInfo) {
 
             $filename = $fileInfo->getPathname();
