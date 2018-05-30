@@ -1,4 +1,3 @@
-
 # Image Optimizer v2
 
 Image optimization / compression console tool. This tool optimizes PNG, JPEG and GIF files in the console, using `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` and can usually reduce the filesize by 10% to 70%.
