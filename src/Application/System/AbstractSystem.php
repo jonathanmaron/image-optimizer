@@ -36,15 +36,9 @@ abstract class AbstractSystem
 
     protected function execute(array $command): bool
     {
-        $ret = false;
-
         $process = new Process($command);
         $process->setTimeout(self::TIMEOUT);
         $process->run();
-
-        if ($process->isSuccessful()) {
-            $ret = true;
-        }
 
         /*
         dump('---');
@@ -55,7 +49,7 @@ abstract class AbstractSystem
         dump('---');
         */
 
-        return $ret;
+        return $process->isSuccessful();
     }
 
     protected function rename(string $sourceFilename, string $destinationFilename): bool

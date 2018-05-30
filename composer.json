@@ -1,6 +1,8 @@
 {
     "name": "jonathanmaron/image-optimizer",
     "description": "Image optimization / compression CLI tool. This tool optimizes PNG and JPEG files from the CLI, using 'pngout', 'pngcrush' and 'jpegtran'.",
+    "license": "BSD-3-Clause",
+    "type": "project",
     "keywords": [
         "image optimizer",
         "compression",
@@ -10,9 +12,7 @@
         "pngcrush",
         "jpegtran"
     ],
-    "type": "project",
     "homepage": "https://github.com/jonathanmaron/image-optimizer",
-    "license": "Apache-2.0",
     "autoload": {
         "psr-4": {
             "Application\\": "src/Application"
@@ -26,7 +26,6 @@
         "symfony/filesystem": "^4.0",
         "symfony/finder": "^4.0",
         "symfony/lock": "^4.0",
-        "symfony/yaml": "^4.0",
         "symfony/process": "^4.0"
     },
     "require-dev": {
@@ -35,6 +34,7 @@
         "symfony/var-dumper": "^4.0"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit test"
+        "test": "vendor/bin/phpunit",
+        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml"
     }
 }

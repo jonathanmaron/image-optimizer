@@ -9,7 +9,9 @@ use Symfony\Component\Console\Command\Command;
 class CommandFactory
 {
     public function __invoke(
-        ?ContainerInterface $container = null, ?string $requestedName = null, ?array $options = null
+        ?ContainerInterface $container = null,
+        ?string $requestedName = null,
+        ?array $options = null
     ): Command {
 
         $command = new $requestedName;

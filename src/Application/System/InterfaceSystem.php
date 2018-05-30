@@ -9,4 +9,3 @@ interface InterfaceSystem
 
     public function optimize(string $filename): bool;
 }
-

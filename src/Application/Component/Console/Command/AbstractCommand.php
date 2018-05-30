@@ -99,7 +99,13 @@ abstract class AbstractCommand extends ParentCommand
         return $this;
     }
 
-    protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, array $totals, int $count): self {
+    protected function bannerGrandTotals(
+        InputInterface $input,
+        OutputInterface $output,
+        array $totals,
+        int $count
+    ): self {
+
         $noun = function ($count) {
             return (1 == $count) ? 'file' : 'files';
         };
