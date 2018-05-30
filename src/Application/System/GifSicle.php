@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Application\System;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 class GifSicle extends AbstractSystem implements InterfaceSystem
 {
     const EXEC = '/usr/bin/gifsicle';
@@ -16,19 +14,20 @@ class GifSicle extends AbstractSystem implements InterfaceSystem
 
     public function optimize(string $filename): bool
     {
-        $filesystem = new Filesystem();
-
         $tempFilename = $this->getTempFilename();
 
-        $format = '%s -O3 %s -o %s > /dev/null 2>&1';
-        $exec   = sprintf($format
-            , escapeshellcmd(self::EXEC)
-            , escapeshellarg($filename)
-            , escapeshellarg($tempFilename));
-        exec($exec);
+        $command = [
+            self::EXEC,
+            $filename,
+            '--optimize=3',
+            '--verbose',
+            '--output',
+            $tempFilename,
+        ];
 
-        $filesystem->rename($tempFilename, $filename, true);
+        $ret1 = $this->execute($command);
+        $ret2 = $this->rename($tempFilename, $filename);
 
-        return true;
+        return ($ret1 && $ret2);
     }
 }

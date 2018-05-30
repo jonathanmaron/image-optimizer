@@ -5,7 +5,7 @@ namespace Application\System;
 
 class PngOut extends AbstractSystem implements InterfaceSystem
 {
-    const EXEC = '/usr/bin/pngout';
+    private const EXEC = '/usr/bin/pngout';
 
     public function __construct()
     {
@@ -14,13 +14,15 @@ class PngOut extends AbstractSystem implements InterfaceSystem
 
     public function optimize(string $filename): bool
     {
-        $format = '%s %s -s0 > /dev/null 2>&1';
-        $exec   = sprintf($format
-            , escapeshellcmd(self::EXEC)
-            , escapeshellarg($filename)
-        );
-        exec($exec);
+        $command = [
+            self::EXEC,
+            $filename,
+            '-s0',
+            '-v',
+        ];
 
-        return true;
+        $ret = $this->execute($command);
+
+        return $ret;
     }
 }

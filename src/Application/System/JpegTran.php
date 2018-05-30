@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace Application\System;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 class JpegTran extends AbstractSystem implements InterfaceSystem
 {
-    const EXEC = '/usr/bin/jpegtran';
+    private const EXEC = '/usr/bin/jpegtran';
 
     public function __construct()
     {
@@ -16,20 +14,21 @@ class JpegTran extends AbstractSystem implements InterfaceSystem
 
     public function optimize(string $filename): bool
     {
-        $filesystem = new Filesystem();
-
         $tempFilename = $this->getTempFilename();
 
-        $format = '%s -optimize -progressive -outfile %s %s > /dev/null 2>&1';
-        $exec   = sprintf($format
-            , escapeshellcmd(self::EXEC)
-            , escapeshellarg($tempFilename)
-            , escapeshellarg($filename)
-        );
-        exec($exec);
+        $command = [
+            self::EXEC,
+            '-optimize',
+            '-progressive',
+            '-verbose',
+            '-outfile',
+            $tempFilename,
+            $filename,
+        ];
 
-        $filesystem->rename($tempFilename, $filename, true);
+        $ret1 = $this->execute($command);
+        $ret2 = $this->rename($tempFilename, $filename, true);
 
-        return true;
+        return ($ret1 && $ret2);
     }
 }

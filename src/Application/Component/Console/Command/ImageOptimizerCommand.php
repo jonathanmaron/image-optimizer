@@ -95,17 +95,16 @@ class ImageOptimizerCommand extends AbstractCommand
             'diff_pct'  => 0, // Difference as percent between 'in' and 'out'
         ];
 
-        $finder  = $finder->in($this->getPath());
-        $count   = $finder->count();
-        $counter = 0;
+        $finder    = $finder->in($this->getPath());
+        $filenames = $finder->getFilenames();
+        $count     = count($filenames);
+        $counter   = 0;
 
-        foreach ($finder->filenames() as $fileInfo) {
-
-            $filename = $fileInfo->getPathname();
+        foreach ($filenames as $filename) {
 
             $counter++;
 
-            $format  = '[%s/%d] Processing "%s"... ';
+            $format  = '[%d/%d] Processing "%s"... ';
             $message = sprintf($format, $counter, $count, $filename);
             $output->write($message);
 

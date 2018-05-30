@@ -23,20 +23,26 @@ class Finder extends ParentFinder
         ];
 
     /**
-     * Return image filenames
+     * Return an array of image filenames
      *
-     * @return Finder
+     * @return array
      */
-    public function filenames(): self
+    public function getFilenames(): array
     {
+        $ret = [];
+
         $finder = $this->files();
 
         foreach (self::PATTERNS as $pattern) {
             $finder->name($pattern);
         }
 
-        $finder->sortByName();
+        foreach ($finder as $fileInfo) {
+            array_push($ret, (string) $fileInfo->getPathname());
+        }
 
-        return $finder;
+        sort($ret, SORT_NATURAL);
+
+        return $ret;
     }
 }
