@@ -44,7 +44,7 @@ Between v1 and v2, the structure of the history directory was updated. Therefore
     rm -fr ~/.image_optimizer
 
 
-### Dependencies
+## Dependencies
 
 `image-optimizer` depends upon `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` to perform its work. These tools must be installed, otherwise `image-optimizer` will return an error.
 
@@ -59,5 +59,4 @@ then unpack, then copy to:
 Download and install other dependencies:
 
     apt-get install pngcrush libjpeg-progs jpegoptim gifsicle
-
 
