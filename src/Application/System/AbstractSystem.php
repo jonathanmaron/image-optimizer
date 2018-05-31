@@ -9,8 +9,20 @@ use Symfony\Component\Process\Process;
 
 abstract class AbstractSystem
 {
+    /**
+     * Total number of seconds an installed executable may take to optimize image
+     *
+     * @var int
+     */
     private const TIMEOUT = 3600;
 
+    /**
+     * Return true, if executable is installed. False otherwise.
+     *
+     * @param string $exec
+     *
+     * @return bool
+     */
     public function isInstalled(string $exec): bool
     {
         if (!is_executable($exec)) {
@@ -22,6 +34,11 @@ abstract class AbstractSystem
         return true;
     }
 
+    /**
+     * Create an empty temporary file and return its filename
+     *
+     * @return string
+     */
     public function getTempFilename(): string
     {
         $filesystem = new Filesystem();
@@ -34,6 +51,13 @@ abstract class AbstractSystem
         return $ret;
     }
 
+    /**
+     * Execute an installed executable to optimize image
+     *
+     * @param array $command
+     *
+     * @return bool
+     */
     protected function execute(array $command): bool
     {
         $process = new Process($command);
@@ -52,6 +76,14 @@ abstract class AbstractSystem
         return $process->isSuccessful();
     }
 
+    /**
+     * Rename a filename
+     *
+     * @param string $sourceFilename
+     * @param string $destinationFilename
+     *
+     * @return bool
+     */
     protected function rename(string $sourceFilename, string $destinationFilename): bool
     {
         $filesystem = new Filesystem();

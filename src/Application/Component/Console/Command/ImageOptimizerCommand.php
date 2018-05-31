@@ -7,15 +7,12 @@ use Application\Component\Finder\Finder;
 use Application\Exception\RuntimeException;
 use Application\History\History;
 use Application\Optimizer\Optimizer;
-use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImageOptimizerCommand extends AbstractCommand
 {
-    use LockableTrait;
-
     protected function configure(): self
     {
         $this->setName('image-optimizer');
@@ -46,16 +43,6 @@ class ImageOptimizerCommand extends AbstractCommand
         $description = 'Always optimize images, ignoring history.';
 
         $this->addOption($name, $shortcut, $mode, $description);
-
-        return $this;
-    }
-
-    protected function initialize(InputInterface $input, OutputInterface $output): self
-    {
-        if (!$this->lock()) {
-            $message = 'The script is already running in another process.';
-            throw new RuntimeException($message);
-        }
 
         return $this;
     }

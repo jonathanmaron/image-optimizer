@@ -9,6 +9,8 @@ class Finder extends ParentFinder
 {
     /**
      * Patterns that match image filenames
+     *
+     * @var array
      */
     private const PATTERNS
         = [

@@ -1,6 +1,6 @@
-# Image Optimizer v2
+# Image Optimizer
 
-Image optimization / compression console tool. This tool optimizes PNG, JPEG and GIF files in the console, using `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` and can usually reduce the filesize by 10% to 70%.
+Image optimization and compression tool for the console. This tool optimizes PNG, JPEG and GIF files, using `gifsicle`, `jpegoptim`, `jpegtran`, `pngcrush` and `pngout` and can usually reduce the filesize by 10% to 70%.
 
 As optimzing images is CPU intensive and it may take several minutes for a larger PNG file, `image-optimizer` keeps track of which image files it has optimized. Each image file will only be optimize once, unless the `--force` flag is set.
 

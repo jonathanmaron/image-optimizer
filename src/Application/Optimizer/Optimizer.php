@@ -15,26 +15,34 @@ class Optimizer
 {
     /**
      * PNG image filename extension
+     *
+     * @var string
      */
     private const EXTENSION_PNG = 'png';
 
     /**
      * JPG image filename extension
+     *
+     * @var string
      */
     private const EXTENSION_JPG = 'jpg';
 
     /**
      * JPEG image filename extension
+     *
+     * @var string
      */
     private const EXTENSION_JPEG = 'jpeg';
 
     /**
      * GIF image filename extension
+     *
+     * @var string
      */
     private const EXTENSION_GIF = 'gif';
 
     /**
-     * Optimize an image filename
+     * Using the installed executables, optimize the passed image file
      *
      * @param string $filename
      *
