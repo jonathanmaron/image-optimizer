@@ -52,7 +52,7 @@ class ImageOptimizerCommand extends AbstractCommand
         $path = (string) $input->getOption('path');
         $path = trim($path);
         if (!is_readable($path)) {
-            $message = sprintf('The "--path" option is missing or invalid.', $path);
+            $message = 'The "--path" option is missing or invalid.';
             throw new RuntimeException($message);
         }
         $this->setPath(realpath($path));
