@@ -8,9 +8,11 @@
         "compression",
         "image",
         "optimization",
-        "pngout",
+        "gifsicle",
+        "jpegoptim",
+        "jpegtran",
         "pngcrush",
-        "jpegtran"
+        "pngout"
     ],
     "homepage": "https://github.com/jonathanmaron/image-optimizer",
     "autoload": {
