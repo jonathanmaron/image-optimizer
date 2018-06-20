@@ -38,7 +38,7 @@ so that `image-optimizer` is available to the logged in user globally.
 
 ## Upgrading From Version 1
 
-Between v1 and v2, the structure of the history directory was updated. Therefore, please remove your current history directory. A new one, with the new structure, will be created when `image-optimizer` is executed for the first time: 
+Between v1 and v2, the structure of the history directory was updated. Therefore, please remove your current history directory. A new one, with the new structure, will be created when `image-optimizer` is executed for the first time:
 
     rm -fr ~/.image_optimizer
 
@@ -57,5 +57,5 @@ then unpack, then copy to:
 
 Download and install other dependencies:
 
-    apt-get install pngcrush libjpeg-progs jpegoptim gifsicle
+    apt install pngcrush libjpeg-progs jpegoptim gifsicle
 
