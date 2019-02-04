@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace ApplicationTest\Optimizer;
 
 use Application\Component\Finder\Finder;
+use Application\Exception\RuntimeException;
 use Application\Optimizer\Optimizer;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
-class OptimizerTest extends TestCase
+class OptimizerTest extends AbstractTestCase
 {
     protected $optimizer;
 
@@ -26,7 +26,7 @@ class OptimizerTest extends TestCase
         parent::tearDown();
     }
 
-    private function getTestPath(): string
+    private function getTestAssetWorkingPath(): string
     {
         $finder     = new Finder();
         $filesystem = new Filesystem();
@@ -41,7 +41,7 @@ class OptimizerTest extends TestCase
 
         $filesystem->mkdir($targetPath);
 
-        $originPath = dirname(__FILE__, 3) . '/asset';
+        $originPath = $this->getTestAssetPath();
         $finder     = $finder->in($originPath);
 
         array_map(function ($originFile) use ($filesystem, $targetPath) {
@@ -57,10 +57,10 @@ class OptimizerTest extends TestCase
         $finder     = new Finder();
         $filesystem = new Filesystem();
 
-        $path   = $this->getTestPath();
-        $finder = $finder->in($path);
+        $workingPath = $this->getTestAssetWorkingPath();
+        $finder      = $finder->in($workingPath);
 
-        array_map(function ($filename) use ($path) {
+        array_map(function ($filename) use ($workingPath) {
             $mode     = fileperms($filename);
             $filesize = filesize($filename);
             $actual   = $this->optimizer->optimizeImage($filename);
@@ -69,6 +69,27 @@ class OptimizerTest extends TestCase
             $this->assertEquals($mode, fileperms($filename));
             $this->assertLessThanOrEqual($filesize, filesize($filename));
         }, $finder->getFilenames());
-        $filesystem->remove($path);
+
+        $filesystem->remove($workingPath);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testOptimizeImageExceptionIsThrownOnNonExistentFilename(): void
+    {
+        $this->optimizer->optimizeImage('invalid.abc');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testOptimizeImageExceptionIsThrownOnUnsupportedFileType(): void
+    {
+        $filesystem = new Filesystem();
+        $filename   = sys_get_temp_dir() . '/invalid.abc';
+        $filesystem->touch($filename);
+        $this->optimizer->optimizeImage($filename);
+        $filesystem->remove($filename);
     }
 }

@@ -20,6 +20,11 @@
             "Application\\": "src/Application"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ApplicationTest\\": "test/ApplicationTest"
+        }
+    },
     "require": {
         "php": "^7.1",
         "container-interop/container-interop": "^1.2",

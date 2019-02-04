@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace ApplicationTest\History;
 
 use Application\History\History;
-use PHPUnit\Framework\TestCase;
 
-class HistoryTest extends TestCase
+class HistoryTest extends AbstractTestCase
 {
     protected $history;
 
@@ -24,14 +23,9 @@ class HistoryTest extends TestCase
         parent::tearDown();
     }
 
-    private function getTestFilename(): string
-    {
-        return dirname(__FILE__, 3) . '/asset/wave.jpg';
-    }
-
     public function testGetHash(): void
     {
-        $filename = $this->getTestFilename();
+        $filename = $this->getTestAssetFilename();
 
         $expected = '48d10460971376c6fe3d5bbf5d3af2443aff9aade89d2f036eb1a879eea2d15e';
         $actual   = $this->history->getHash($filename);
@@ -41,7 +35,7 @@ class HistoryTest extends TestCase
 
     public function testGetHashFile(): void
     {
-        $filename = $this->getTestFilename();
+        $filename = $this->getTestAssetFilename();
 
         $expected = '0a645e6aff6887af8a2bdeb877e5304a4815340e743cb2d52a134acdd57a8c57';
         $actual   = $this->history->getHashFile($filename);
@@ -51,7 +45,7 @@ class HistoryTest extends TestCase
 
     public function testGetHashFilename(): void
     {
-        $filename = $this->getTestFilename();
+        $filename = $this->getTestAssetFilename();
         $hash     = $this->history->getHash($filename);
 
         $expected = '.image_optimizer/48/d1/04/48d10460971376c6fe3d5bbf5d3af2443aff9aade89d2f036eb1a879eea2d15e';
@@ -72,7 +66,7 @@ class HistoryTest extends TestCase
 
     public function testImageStatus(): void
     {
-        $filename = $this->getTestFilename();
+        $filename = $this->getTestAssetFilename();
 
         $actual = $this->history->isOptimizedImage($filename);
         $this->assertFalse($actual);

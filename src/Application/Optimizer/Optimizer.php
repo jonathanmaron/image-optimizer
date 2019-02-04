@@ -52,6 +52,12 @@ class Optimizer
     {
         $filesystem = new Filesystem();
 
+        if (!$filesystem->exists($filename)) {
+            $format  = '"%s" does not exist';
+            $message = sprintf($format, $filename);
+            throw new RuntimeException($message);
+        }
+
         $mode      = fileperms($filename);
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
