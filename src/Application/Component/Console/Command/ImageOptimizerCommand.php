@@ -18,7 +18,7 @@ class ImageOptimizerCommand extends AbstractCommand
         $this->setName('image-optimizer');
 
         $description = 'Image optimization / compression CLI tool. This tool optimizes PNG, JPEG and GIF files, ';
-        $description .= 'using a number of external toolsthat must be installed.';
+        $description .= 'using a number of external tools that must be installed.';
 
         $this->setDescription($description);
 
