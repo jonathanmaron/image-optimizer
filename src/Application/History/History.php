@@ -36,26 +36,6 @@ class History
     private const HASH_DIRECTORY_LENGTH = 2;
 
     /**
-     * Mark the image filename as 'optimized', by saving a hash of the contents of the file in the history directory
-     *
-     * @param $filename
-     *
-     * @return bool
-     */
-    public function setImageAsOptimized(string $filename): bool
-    {
-        $filesystem = new Filesystem();
-
-        $hash         = $this->getHash($filename);
-        $hashFile     = $this->getHashFile($filename);
-        $hashFilename = $this->getHashFilename($hash);
-
-        $filesystem->dumpFile($hashFilename, $hashFile);
-
-        return true;
-    }
-
-    /**
      * Return a hash of the filename
      *
      * @param $filename
@@ -120,29 +100,69 @@ class History
     }
 
     /**
-     * Return true, if an image file needs to be optimized. i.e. it is currently in an 'unoptimized' state.
+     * Return true, if an image file has been optimized
      *
      * @param $filename
      *
      * @return bool
      */
-    public function isUnoptimizedImage(string $filename): bool
+    public function isOptimizedImage(string $filename): bool
     {
-        $ret = true;
-
         $filesystem = new Filesystem();
 
         $hash         = $this->getHash($filename);
         $hashFilename = $this->getHashFilename($hash);
 
-        if ($filesystem->exists($hashFilename)) {
-            clearStatCache();
-            $hashFile = file_get_contents($hashFilename);
-            if ($hashFile === $this->getHashFile($filename)) {
-                $ret = false;
-            }
+        if (!$filesystem->exists($hashFilename)) {
+            return false;
         }
 
-        return $ret;
+        clearStatCache();
+
+        $hashFile = file_get_contents($hashFilename);
+        if ($hashFile !== $this->getHashFile($filename)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Mark the image filename as 'optimized', by saving a hash of the contents of the file in the history directory
+     *
+     * @param $filename
+     *
+     * @return bool
+     */
+    public function setImageAsOptimized(string $filename): bool
+    {
+        $filesystem = new Filesystem();
+
+        $hash         = $this->getHash($filename);
+        $hashFile     = $this->getHashFile($filename);
+        $hashFilename = $this->getHashFilename($hash);
+
+        $filesystem->dumpFile($hashFilename, $hashFile);
+
+        return $filesystem->exists($hashFilename);
+    }
+
+    /**
+     * Mark the image filename as 'unoptimized', by the file in the history directory
+     *
+     * @param $filename
+     *
+     * @return bool
+     */
+    public function setImageAsUnoptimized(string $filename): bool
+    {
+        $filesystem = new Filesystem();
+
+        $hash         = $this->getHash($filename);
+        $hashFilename = $this->getHashFilename($hash);
+
+        $filesystem->remove($hashFilename);
+
+        return !$filesystem->exists($hashFilename);
     }
 }

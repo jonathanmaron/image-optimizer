@@ -83,6 +83,6 @@ class Optimizer
 
         $filesystem->chmod($filename, $mode);
 
-        return true;
+        return $filesystem->exists($filename);
     }
 }
