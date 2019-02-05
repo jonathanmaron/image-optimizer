@@ -8,10 +8,6 @@ if (!defined('REQUEST_MICROTIME')) {
     define('REQUEST_MICROTIME', microtime(true));
 }
 
-$applicationRoot = dirname(__FILE__, 2);
-
-require_once $applicationRoot . '/vendor/autoload.php';
-
-define('APPLICATION_ROOT', $applicationRoot);
+define('APPLICATION_ROOT', dirname(__FILE__, 2));
 
 locale_set_default('en_US');

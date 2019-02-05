@@ -26,6 +26,7 @@ class LoaderTest extends TestCase
     protected function tearDown()
     {
         unset($this->loader);
+
         parent::tearDown();
     }
 
