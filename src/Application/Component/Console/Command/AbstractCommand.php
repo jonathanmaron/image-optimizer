@@ -14,11 +14,25 @@ abstract class AbstractCommand extends ParentCommand
 
     private const BANNER_END   = 'banner_end';
 
+    private $config    = [];
+
     private $path      = '';
 
     private $indexOnly = false;
 
     private $force     = false;
+
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    public function setConfig(array $config): self
+    {
+        $this->config = $config;
+
+        return $this;
+    }
 
     public function getPath(): string
     {
