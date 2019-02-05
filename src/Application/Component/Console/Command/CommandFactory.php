@@ -5,12 +5,18 @@ namespace Application\Component\Console\Command;
 
 use Application\Component\Config\Loader\FileLoader\Loader;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
+use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
 
 class CommandFactory
 {
-    private const CONFIG_FILE = 'application.yaml';
+    private const CONFIG_FILES
+        = [
+            'application.yaml.dist',
+            'application.yaml',
+        ];
 
     public function __invoke(
         ?ContainerInterface $container = null,
@@ -19,14 +25,24 @@ class CommandFactory
     ): Command {
 
         $paths = [
-            realpath(APPLICATION_ROOT . '/config'),
+            APPLICATION_ROOT . '/config',
         ];
 
         $locator = new FileLocator($paths);
         $loader  = new Loader($locator);
 
-        $filename = $locator->locate(self::CONFIG_FILE, null, true);
-        $config   = $loader->load($filename);
+        $config = [];
+        foreach (self::CONFIG_FILES as $name) {
+            $loaded = [];
+            try {
+                $filename = $locator->locate($name, null, true);
+                $loaded   = $loader->load($filename);
+            } catch (InvalidArgumentException | FileLocatorFileNotFoundException $e) {
+            }
+            if (count($loaded) > 0) {
+                $config = array_merge($config, $loaded);
+            }
+        }
 
         $command = new $requestedName;
         $command->setConfig($config);

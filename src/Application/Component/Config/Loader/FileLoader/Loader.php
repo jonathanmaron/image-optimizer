@@ -8,13 +8,27 @@ use Symfony\Component\Yaml\Yaml;
 
 class Loader extends FileLoader
 {
-    public function load($resource, $type = null)
+    public function load($resource, $type = null): array
     {
-        return Yaml::parse(file_get_contents($resource));
+        $buffer = file_get_contents($resource);
+
+        return (array) Yaml::parse($buffer);
     }
 
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
-        return is_string($resource) && 'yaml' === pathinfo($resource, PATHINFO_EXTENSION);
+        if (!is_string($resource)) {
+            return false;
+        }
+
+        if (1 === preg_match('/(.*)\.yaml$/', $resource)) {
+            return true;
+        }
+
+        if (1 === preg_match('/(.*)\.yaml\.dist$/', $resource)) {
+            return true;
+        }
+
+        return false;
     }
 }

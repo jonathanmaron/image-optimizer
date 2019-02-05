@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit colors="true" verbose="true">
+<phpunit colors="true" verbose="true"  bootstrap="test/bootstrap.php">
 
     <testsuites>
         <testsuite name="image-optimizer">
