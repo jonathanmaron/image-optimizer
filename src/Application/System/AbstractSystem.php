@@ -46,9 +46,7 @@ abstract class AbstractSystem
         $path   = sys_get_temp_dir();
         $prefix = 'image_optimizer_';
 
-        $ret = $filesystem->tempnam($path, $prefix);
-
-        return $ret;
+        return $filesystem->tempnam($path, $prefix);
     }
 
     /**

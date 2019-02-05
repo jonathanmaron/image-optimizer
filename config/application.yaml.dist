@@ -1,2 +1,5 @@
-config:
-    a: 1
+credentials:
+    tinify:
+        username: null
+        password: null
+        api_key: null

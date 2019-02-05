@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Application\Component\Console\Command;
 
-use Application\Component\Finder\Finder;
 use Application\Exception\RuntimeException;
-use Application\History\History;
-use Application\Optimizer\Optimizer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -68,9 +65,9 @@ class ImageOptimizerCommand extends AbstractCommand
 
     protected function main(InputInterface $input, OutputInterface $output): self
     {
-        $history   = new History();
-        $finder    = new Finder();
-        $optimizer = new Optimizer();
+        $history   = $this->getHistory();
+        $finder    = $this->getFinder();
+        $optimizer = $this->getOptimizer();
 
         $grandTotals = [
             'skipped'   => 0, // Number of image files that have been skipped
@@ -96,13 +93,13 @@ class ImageOptimizerCommand extends AbstractCommand
             $output->write($message);
 
             if ($this->getIndexOnly()) {
-                $history->setImageAsOptimized($filename);
+                $history->setAsOptimized($filename);
                 $grandTotals['indexed']++;
                 $output->writeLn('Indexed only.');
                 continue;
             }
 
-            if ($history->isOptimizedImage($filename) && !$this->getForce()) {
+            if ($history->isOptimized($filename) && !$this->getForce()) {
                 $output->writeln('Skipped.');
                 $grandTotals['skipped']++;
                 continue;
@@ -115,7 +112,7 @@ class ImageOptimizerCommand extends AbstractCommand
                 'diff_pct' => 0,                   // Difference as percent between 'in' and 'out'
             ];
 
-            if ($optimizer->optimizeImage($filename)) {
+            if ($optimizer->optimize($filename)) {
 
                 clearStatCache();
 
@@ -133,7 +130,7 @@ class ImageOptimizerCommand extends AbstractCommand
                 $grandTotals['in']  += $subTotals['in'];
                 $grandTotals['out'] += $subTotals['out'];
 
-                $history->setImageAsOptimized($filename);
+                $history->setAsOptimized($filename);
 
                 $grandTotals['optimized']++;
             }

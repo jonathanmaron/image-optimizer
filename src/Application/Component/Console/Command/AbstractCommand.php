@@ -4,71 +4,22 @@ declare(strict_types=1);
 namespace Application\Component\Console\Command;
 
 use Application\Exception\RuntimeException;
+use Application\Utility\ArgumentsTrait;
+use Application\Utility\ConfigTrait;
+use Application\Utility\DependenciesTrait;
 use Symfony\Component\Console\Command\Command as ParentCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCommand extends ParentCommand
 {
+    use ArgumentsTrait;
+    use ConfigTrait;
+    use DependenciesTrait;
+
     private const BANNER_START = 'banner_start';
 
     private const BANNER_END   = 'banner_end';
-
-    private $config    = [];
-
-    private $path      = '';
-
-    private $indexOnly = false;
-
-    private $force     = false;
-
-    public function getConfig(): array
-    {
-        return $this->config;
-    }
-
-    public function setConfig(array $config): self
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    public function getIndexOnly(): bool
-    {
-        return $this->indexOnly;
-    }
-
-    public function setIndexOnly(bool $indexOnly): self
-    {
-        $this->indexOnly = $indexOnly;
-
-        return $this;
-    }
-
-    public function getForce(): bool
-    {
-        return $this->force;
-    }
-
-    public function setForce(bool $force): self
-    {
-        $this->force = $force;
-
-        return $this;
-    }
 
     protected function execute(InputInterface $input, OutputInterface $output): self
     {

@@ -100,13 +100,13 @@ class History
     }
 
     /**
-     * Return true, if an image file has been optimized
+     * Return true, if an image filename has already been optimized
      *
      * @param $filename
      *
      * @return bool
      */
-    public function isOptimizedImage(string $filename): bool
+    public function isOptimized(string $filename): bool
     {
         $filesystem = new Filesystem();
 
@@ -128,13 +128,13 @@ class History
     }
 
     /**
-     * Mark the image filename as 'optimized', by saving a hash of the contents of the file in the history directory
+     * Mark the image filename as 'optimized'
      *
      * @param $filename
      *
      * @return bool
      */
-    public function setImageAsOptimized(string $filename): bool
+    public function setAsOptimized(string $filename): bool
     {
         $filesystem = new Filesystem();
 
@@ -148,13 +148,13 @@ class History
     }
 
     /**
-     * Mark the image filename as 'unoptimized', by the file in the history directory
+     * Mark the image filename as 'unoptimized'
      *
      * @param $filename
      *
      * @return bool
      */
-    public function setImageAsUnoptimized(string $filename): bool
+    public function setAsUnoptimized(string $filename): bool
     {
         $filesystem = new Filesystem();
 
