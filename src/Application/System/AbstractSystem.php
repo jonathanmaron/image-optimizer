@@ -26,7 +26,7 @@ abstract class AbstractSystem
     public function isInstalled(string $exec): bool
     {
         if (!is_executable($exec)) {
-            $format  = 'The required command "%s" is not installed.';
+            $format  = "The required command '%s' is not installed.";
             $message = sprintf($format, $exec);
             throw new RuntimeException($message);
         }

@@ -68,19 +68,19 @@ class HistoryTest extends AbstractTestCase
     {
         $filename = $this->getTestAssetFilename();
 
-        $actual = $this->history->isOptimizedImage($filename);
+        $actual = $this->history->isOptimized($filename);
         $this->assertFalse($actual);
 
-        $actual = $this->history->setImageAsOptimized($filename);
+        $actual = $this->history->setAsOptimized($filename);
         $this->assertTrue($actual);
 
-        $actual = $this->history->isOptimizedImage($filename);
+        $actual = $this->history->isOptimized($filename);
         $this->assertTrue($actual);
 
-        $actual = $this->history->setImageAsUnoptimized($filename);
+        $actual = $this->history->setAsUnoptimized($filename);
         $this->assertTrue($actual);
 
-        $actual = $this->history->isOptimizedImage($filename);
+        $actual = $this->history->isOptimized($filename);
         $this->assertFalse($actual);
     }
 }

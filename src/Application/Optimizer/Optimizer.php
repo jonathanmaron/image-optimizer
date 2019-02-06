@@ -74,7 +74,7 @@ class Optimizer
         $filesystem = new Filesystem();
 
         if (!$filesystem->exists($filename)) {
-            $format  = '"%s" does not exist';
+            $format  = "'%s' does not exist";
             $message = sprintf($format, $filename);
             throw new RuntimeException($message);
         }
@@ -95,7 +95,7 @@ class Optimizer
                 $this->optimizeGif($filename, $filesystem);
                 break;
             default:
-                $format  = 'Unsupported image file type "%s"';
+                $format  = "Unsupported image file type '%s'";
                 $message = sprintf($format, $filename);
                 throw new RuntimeException($message);
                 break;
@@ -116,17 +116,26 @@ class Optimizer
      */
     private function optimizePng(string $filename, Filesystem $filesystem): bool
     {
-        $optimizer = new PngOut();
-        $optimizer->optimize($filename);
+        $classNames = [
+            PngOut::class,
+            PngCrush::class,
+        ];
 
-        $optimizer = new PngCrush();
-        $optimizer->optimize($filename);
+        foreach ($classNames as $className) {
+            if ($this->isActive($className)) {
+                $optimizer = new $className();
+                $optimizer->optimize($filename);
+            }
+        }
 
-        $config = $this->getConfig();
-        $apiKey = $config['credentials']['tinify']['api_key'] ?? null;
-        if (is_string($apiKey)) {
-            $optimizer = new Tinify(['api_key' => $apiKey]);
-            $optimizer->optimize($filename);
+        $className = Tinify::class;
+        if ($this->isActive($className)) {
+            $config = $this->getConfig();
+            $apiKey = $config['system'][$className]['api_key'] ?? null;
+            if (is_string($apiKey)) {
+                $optimizer = new Tinify(['api_key' => $apiKey]);
+                $optimizer->optimize($filename);
+            }
         }
 
         return $filesystem->exists($filename);
@@ -142,11 +151,17 @@ class Optimizer
      */
     private function optimizeJpg(string $filename, Filesystem $filesystem): bool
     {
-        $optimizer = new JpegTran();
-        $optimizer->optimize($filename);
+        $classNames = [
+            JpegTran::class,
+            JpegOptim::class,
+        ];
 
-        $optimizer = new JpegOptim();
-        $optimizer->optimize($filename);
+        foreach ($classNames as $className) {
+            if ($this->isActive($className)) {
+                $optimizer = new $className();
+                $optimizer->optimize($filename);
+            }
+        }
 
         return $filesystem->exists($filename);
     }
@@ -161,9 +176,31 @@ class Optimizer
      */
     private function optimizeGif(string $filename, Filesystem $filesystem): bool
     {
-        $optimizer = new GifSicle();
-        $optimizer->optimize($filename);
+        $classNames = [
+            GifSicle::class,
+        ];
+
+        foreach ($classNames as $className) {
+            if ($this->isActive($className)) {
+                $optimizer = new $className();
+                $optimizer->optimize($filename);
+            }
+        }
 
         return $filesystem->exists($filename);
+    }
+
+    /**
+     * Return true is className is active
+     *
+     * @param $className
+     *
+     * @return bool
+     */
+    private function isActive($className): bool
+    {
+        $config = $this->getConfig();
+
+        return $config['system'][$className]['active'] ?? false;
     }
 }

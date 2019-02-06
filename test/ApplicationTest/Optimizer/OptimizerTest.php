@@ -6,15 +6,56 @@ namespace ApplicationTest\Optimizer;
 use Application\Component\Finder\Finder;
 use Application\Exception\RuntimeException;
 use Application\Optimizer\Optimizer;
+use Application\System\GifSicle;
+use Application\System\JpegOptim;
+use Application\System\JpegTran;
+use Application\System\PngCrush;
+use Application\System\PngOut;
+use Application\System\Tinify;
 use Symfony\Component\Filesystem\Filesystem;
 
 class OptimizerTest extends AbstractTestCase
 {
+    protected static $config
+        = [
+            'extensions' => [
+                'jpg',
+                'JPG',
+                'jpeg',
+                'JPEG',
+                'png',
+                'PNG',
+                'gif',
+                'GIF',
+            ],
+            'system'     => [
+                GifSicle::class  => [
+                    'active' => true,
+                ],
+                JpegOptim::class => [
+                    'active' => true,
+                ],
+                JpegTran::class  => [
+                    'active' => true,
+                ],
+                PngCrush::class  => [
+                    'active' => true,
+                ],
+                PngOut::class    => [
+                    'active' => true,
+                ],
+                Tinify::class    => [
+                    'active'  => true,
+                    'api_key' => null,
+                ],
+            ],
+        ];
+
     protected $optimizer;
 
     protected function setUp(): void
     {
-        $this->optimizer = new Optimizer();
+        $this->optimizer = new Optimizer(['config' => self::$config]);
 
         parent::setUp();
     }
@@ -28,7 +69,7 @@ class OptimizerTest extends AbstractTestCase
 
     private function getTestAssetWorkingPath(): string
     {
-        $finder     = new Finder();
+        $finder     = new Finder(['config' => self::$config]);
         $filesystem = new Filesystem();
 
         $rand       = (string) random_int(PHP_INT_MIN, PHP_INT_MAX);
@@ -54,7 +95,7 @@ class OptimizerTest extends AbstractTestCase
 
     public function testOptimizeImage(): void
     {
-        $finder     = new Finder();
+        $finder     = new Finder(['config' => self::$config]);
         $filesystem = new Filesystem();
 
         $workingPath = $this->getTestAssetWorkingPath();
@@ -63,7 +104,7 @@ class OptimizerTest extends AbstractTestCase
         array_map(function ($filename) use ($workingPath) {
             $mode     = fileperms($filename);
             $filesize = filesize($filename);
-            $actual   = $this->optimizer->optimizeImage($filename);
+            $actual   = $this->optimizer->optimize($filename);
             $this->assertTrue($actual);
             clearStatCache();
             $this->assertEquals($mode, fileperms($filename));
@@ -78,7 +119,7 @@ class OptimizerTest extends AbstractTestCase
      */
     public function testOptimizeImageExceptionIsThrownOnNonExistentFilename(): void
     {
-        $this->optimizer->optimizeImage('invalid.abc');
+        $this->optimizer->optimize('invalid.abc');
     }
 
     /**
@@ -89,7 +130,7 @@ class OptimizerTest extends AbstractTestCase
         $filesystem = new Filesystem();
         $filename   = sys_get_temp_dir() . '/invalid.abc';
         $filesystem->touch($filename);
-        $this->optimizer->optimizeImage($filename);
+        $this->optimizer->optimize($filename);
         $filesystem->remove($filename);
     }
 }

@@ -1,5 +1,24 @@
-credentials:
-    tinify:
-        username: null
-        password: null
+extensions:
+    - jpg
+    - JPG
+    - jpeg
+    - JPEG
+    - png
+    - PNG
+    - gif
+    - GIF
+
+system:
+    Application\System\GifSicle:
+        active: true
+    Application\System\JpegOptim:
+        active: true
+    Application\System\JpegTran:
+        active: true
+    Application\System\PngCrush:
+        active: true
+    Application\System\PngOut:
+        active: true
+    Application\System\Tinify:
+        active: true
         api_key: null

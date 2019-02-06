@@ -48,7 +48,7 @@ class CommandFactory
         }
 
         $optimizer = new Optimizer(['config' => $config]);
-        $finder    = new Finder();
+        $finder    = new Finder(['config' => $config]);
         $history   = new History();
 
         $command = new $requestedName;
