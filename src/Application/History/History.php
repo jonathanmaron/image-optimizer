@@ -5,36 +5,8 @@ namespace Application\History;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-class History
+class History extends AbstractHistory
 {
-    /**
-     * Algorithm to create hashes
-     *
-     * @var string
-     */
-    private const HASH_ALGORITHM = 'sha256';
-
-    /**
-     * Directory in which to store hashes
-     *
-     * @var string
-     */
-    private const HASH_DIRECTORY = '.image_optimizer';
-
-    /**
-     * Depth of hash directory
-     *
-     * @var integer
-     */
-    private const HASH_DIRECTORY_DEPTH = 3;
-
-    /**
-     * Length of each sub directory name in hash directory
-     *
-     * @var integer
-     */
-    private const HASH_DIRECTORY_LENGTH = 2;
-
     /**
      * Return a hash of the filename
      *

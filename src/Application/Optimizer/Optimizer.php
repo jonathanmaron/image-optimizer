@@ -11,41 +11,10 @@ use Application\System\JpegTran;
 use Application\System\PngCrush;
 use Application\System\PngOut;
 use Application\System\Tinify;
-use Application\Utility\ConfigTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
-class Optimizer
+class Optimizer extends AbstractOptimizer
 {
-    use ConfigTrait;
-
-    /**
-     * PNG image filename extension
-     *
-     * @var string
-     */
-    private const EXTENSION_PNG = 'png';
-
-    /**
-     * JPG image filename extension
-     *
-     * @var string
-     */
-    private const EXTENSION_JPG = 'jpg';
-
-    /**
-     * JPEG image filename extension
-     *
-     * @var string
-     */
-    private const EXTENSION_JPEG = 'jpeg';
-
-    /**
-     * GIF image filename extension
-     *
-     * @var string
-     */
-    private const EXTENSION_GIF = 'gif';
-
     /**
      * Optimizer constructor
      *
@@ -114,7 +83,7 @@ class Optimizer
      *
      * @return bool
      */
-    private function optimizePng(string $filename, Filesystem $filesystem): bool
+    protected function optimizePng(string $filename, Filesystem $filesystem): bool
     {
         $classNames = [
             PngOut::class,
@@ -149,7 +118,7 @@ class Optimizer
      *
      * @return bool
      */
-    private function optimizeJpg(string $filename, Filesystem $filesystem): bool
+    protected function optimizeJpg(string $filename, Filesystem $filesystem): bool
     {
         $classNames = [
             JpegTran::class,
@@ -174,7 +143,7 @@ class Optimizer
      *
      * @return bool
      */
-    private function optimizeGif(string $filename, Filesystem $filesystem): bool
+    protected function optimizeGif(string $filename, Filesystem $filesystem): bool
     {
         $classNames = [
             GifSicle::class,
@@ -188,19 +157,5 @@ class Optimizer
         }
 
         return $filesystem->exists($filename);
-    }
-
-    /**
-     * Return true is className is active
-     *
-     * @param $className
-     *
-     * @return bool
-     */
-    private function isActive($className): bool
-    {
-        $config = $this->getConfig();
-
-        return $config['system'][$className]['active'] ?? false;
     }
 }

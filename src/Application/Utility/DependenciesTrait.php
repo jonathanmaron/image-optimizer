@@ -10,13 +10,13 @@ use Application\Statistics\Statistics;
 
 trait DependenciesTrait
 {
-    private $finder;
+    protected $finder;
 
-    private $history;
+    protected $history;
 
-    private $optimizer;
+    protected $optimizer;
 
-    private $statistics;
+    protected $statistics;
 
     public function getFinder(): Finder
     {

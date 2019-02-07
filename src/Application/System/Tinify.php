@@ -20,7 +20,7 @@ class Tinify extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    private $apiKey;
+    protected $apiKey;
 
     /**
      * Tinify constructor
