@@ -28,25 +28,7 @@ class CommandFactory
         ?array $options = null
     ): Command {
 
-        $paths = [
-            APPLICATION_ROOT . '/config',
-        ];
-
-        $locator = new FileLocator($paths);
-        $loader  = new Loader($locator);
-
-        $config = [];
-        foreach (self::CONFIG_FILES as $name) {
-            $loaded = [];
-            try {
-                $filename = $locator->locate($name, null, true);
-                $loaded   = $loader->load($filename);
-            } catch (InvalidArgumentException | FileLocatorFileNotFoundException $e) {
-            }
-            if (count($loaded) > 0) {
-                $config = array_merge($config, $loaded);
-            }
-        }
+        $config = $this->getConfig();
 
         $finder     = new Finder(['config' => $config]);
         $history    = new History();
@@ -61,5 +43,31 @@ class CommandFactory
         $command->setStatistics($statistics);
 
         return $command;
+    }
+
+    private function getConfig(): array
+    {
+        $ret = [];
+
+        $paths = [
+            APPLICATION_ROOT . '/config',
+        ];
+
+        $locator = new FileLocator($paths);
+        $loader  = new Loader($locator);
+
+        foreach (self::CONFIG_FILES as $name) {
+            $config = [];
+            try {
+                $filename = $locator->locate($name, null, true);
+                $config   = $loader->load($filename);
+            } catch (InvalidArgumentException | FileLocatorFileNotFoundException $e) {
+            }
+            if (count($config) > 0) {
+                $ret = array_merge($ret, $config);
+            }
+        }
+
+        return $ret;
     }
 }
