@@ -65,19 +65,10 @@ class ImageOptimizerCommand extends AbstractCommand
 
     protected function main(InputInterface $input, OutputInterface $output): self
     {
-        $history   = $this->getHistory();
-        $finder    = $this->getFinder();
-        $optimizer = $this->getOptimizer();
-
-        $grandTotals = [
-            'skipped'   => 0, // Number of image files that have been skipped
-            'optimized' => 0, // Number of image files that have been optimized
-            'indexed'   => 0, // Number of image files that have been indexed
-            'in'        => 0, // Total number of bytes before optimization
-            'out'       => 0, // Total number of bytes after optimization
-            'diff'      => 0, // Difference in bytes between 'in' and 'out'
-            'diff_pct'  => 0, // Difference as percent between 'in' and 'out'
-        ];
+        $finder     = $this->getFinder();
+        $history    = $this->getHistory();
+        $optimizer  = $this->getOptimizer();
+        $statistics = $this->getStatistics();
 
         $finder    = $finder->in($this->getPath());
         $filenames = $finder->getFilenames();
@@ -88,55 +79,44 @@ class ImageOptimizerCommand extends AbstractCommand
 
             $counter++;
 
+            $statistics->resetBytesIn();
+            $statistics->resetBytesOut();
+
             $format  = '[%d/%d] Processing "%s"... ';
             $message = sprintf($format, $counter, $count, $filename);
             $output->write($message);
 
             if ($this->getIndexOnly()) {
                 $history->setAsOptimized($filename);
-                $grandTotals['indexed']++;
+                $statistics->incrementIndexed();
                 $output->writeLn('Indexed only.');
                 continue;
             }
 
             if ($history->isOptimized($filename) && !$this->getForce()) {
                 $output->writeln('Skipped.');
-                $grandTotals['skipped']++;
+                $statistics->incrementSkipped();
                 continue;
             }
 
-            $subTotals = [
-                'in'       => filesize($filename), // Number of bytes before optimization
-                'out'      => 0,                   // Number of bytes after optimization
-                'diff'     => 0,                   // Difference in bytes between 'in' and 'out'
-                'diff_pct' => 0,                   // Difference as percent between 'in' and 'out'
-            ];
+            $statistics->setBytesIn(filesize($filename));
 
             if ($optimizer->optimize($filename)) {
 
                 clearStatCache();
 
-                $subTotals['out']  = filesize($filename);
-                $subTotals['diff'] = $subTotals['in'] - $subTotals['out'];
-
-                if ($subTotals['out'] > 0 && $subTotals['in'] > 0) {
-                    $subTotals['diff_pct'] = 100 - (($subTotals['out'] / $subTotals['in']) * 100);
-                }
+                $statistics->setBytesOut(filesize($filename));
 
                 $format  = 'Saving: %01.4f %%.';
-                $message = sprintf($format, $subTotals['diff_pct']);
+                $message = sprintf($format, $statistics->getBytesDifferenceAsPercentage());
                 $output->writeln($message);
 
-                $grandTotals['in']  += $subTotals['in'];
-                $grandTotals['out'] += $subTotals['out'];
-
                 $history->setAsOptimized($filename);
-
-                $grandTotals['optimized']++;
+                $statistics->incrementOptimized();
             }
         }
 
-        $this->bannerGrandTotals($input, $output, $grandTotals, $count);
+        $this->bannerGrandTotals($input, $output, $statistics);
 
         return $this;
     }

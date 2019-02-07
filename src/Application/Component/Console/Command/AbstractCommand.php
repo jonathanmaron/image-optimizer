@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Application\Component\Console\Command;
 
 use Application\Exception\RuntimeException;
+use Application\Statistics\Statistics;
 use Application\Utility\ArgumentsTrait;
 use Application\Utility\ConfigTrait;
 use Application\Utility\DependenciesTrait;
+use NumberFormatter;
 use Symfony\Component\Console\Command\Command as ParentCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,21 +41,19 @@ abstract class AbstractCommand extends ParentCommand
             case self::BANNER_START:
                 $command  = $input->getArgument('command');
                 $messages = [
-                    '',
+                    null,
                     sprintf('## Command    : %s', $command),
                     sprintf('## Start time : %s', date('r', $timestamp)),
-                    '',
+                    null,
                 ];
-                $output->writeln($messages);
                 break;
             case self::BANNER_END:
                 $messages = [
-                    '',
+                    null,
                     sprintf('## End time       : %s', date('r', $timestamp)),
                     sprintf('## Execution time : %0.4f s', $execution),
-                    '',
+                    null,
                 ];
-                $output->writeln($messages);
                 break;
             default:
                 $message = 'Invalid banner type';
@@ -61,36 +61,40 @@ abstract class AbstractCommand extends ParentCommand
                 break;
         }
 
+        $output->writeln($messages);
+
         return $this;
     }
 
-    protected function bannerGrandTotals(
-        InputInterface $input,
-        OutputInterface $output,
-        array $totals,
-        int $count
-    ): self {
+    protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, Statistics $statistics): self
+    {
+        $formatter = new NumberFormatter(locale_get_default(), NumberFormatter::DECIMAL);
 
         $noun = function ($count) {
-            return (1 == $count) ? 'file' : 'files';
+            return (1 === $count) ? 'file' : 'files';
         };
 
-        $totals['diff'] = $totals['in'] - $totals['out'];
-        if ($totals['out'] > 0 && $totals['in'] > 0) {
-            $totals['diff_pct'] = 100 - (($totals['out'] / $totals['in']) * 100);
-        }
+        $optimized = $statistics->getOptimized();
+        $skipped   = $statistics->getSkipped();
+        $indexed   = $statistics->getIndexed();
+        $total     = $statistics->getTotal();
+
+        $totalBytesIn        = $statistics->getTotalBytesIn();
+        $totalBytesOut       = $statistics->getTotalBytesOut();
+        $totalBytesDiff      = $statistics->getTotalBytesDifference();
+        $totalBytesDiffAsPct = $statistics->getTotalBytesDifferenceAsPercentage();
 
         $messages = [
-            '',
-            sprintf('Total     : %d %s', $count, $noun($count)),
-            '',
-            sprintf('Optimized : %d %s', $totals['optimized'], $noun($totals['optimized'])),
-            sprintf('Skipped   : %d %s', $totals['skipped'], $noun($totals['skipped'])),
-            sprintf('Indexed   : %d %s', $totals['indexed'], $noun($totals['indexed'])),
-            '',
-            sprintf('In        : %d b', $totals['in']),
-            sprintf('Out       : %d b', $totals['out']),
-            sprintf('Diff      : %d b (%01.4f %%)', $totals['diff'], $totals['diff_pct']),
+            null,
+            sprintf('Total     : %s %s', $formatter->format($total), $noun($total)),
+            null,
+            sprintf('Optimized : %s %s', $formatter->format($optimized), $noun($optimized)),
+            sprintf('Skipped   : %s %s', $formatter->format($skipped), $noun($skipped)),
+            sprintf('Indexed   : %s %s', $formatter->format($indexed), $noun($indexed)),
+            null,
+            sprintf('In        : %s b', $formatter->format($totalBytesIn)),
+            sprintf('Out       : %s b', $formatter->format($totalBytesOut)),
+            sprintf('Diff      : %s b (%01.4f %%)', $formatter->format($totalBytesDiff), $totalBytesDiffAsPct),
         ];
         $output->writeLn($messages);
 

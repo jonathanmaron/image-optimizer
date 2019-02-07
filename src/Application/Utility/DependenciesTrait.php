@@ -6,23 +6,26 @@ namespace Application\Utility;
 use Application\Component\Finder\Finder;
 use Application\History\History;
 use Application\Optimizer\Optimizer;
+use Application\Statistics\Statistics;
 
 trait DependenciesTrait
 {
-    private $optimizer;
+    private $finder;
 
     private $history;
 
-    private $finder;
+    private $optimizer;
 
-    public function getOptimizer(): Optimizer
+    private $statistics;
+
+    public function getFinder(): Finder
     {
-        return $this->optimizer;
+        return $this->finder;
     }
 
-    public function setOptimizer(Optimizer $optimizer): self
+    public function setFinder(Finder $finder): self
     {
-        $this->optimizer = $optimizer;
+        $this->finder = $finder;
 
         return $this;
     }
@@ -39,14 +42,26 @@ trait DependenciesTrait
         return $this;
     }
 
-    public function getFinder(): Finder
+    public function getOptimizer(): Optimizer
     {
-        return $this->finder;
+        return $this->optimizer;
     }
 
-    public function setFinder(Finder $finder): self
+    public function setOptimizer(Optimizer $optimizer): self
     {
-        $this->finder = $finder;
+        $this->optimizer = $optimizer;
+
+        return $this;
+    }
+
+    public function getStatistics(): Statistics
+    {
+        return $this->statistics;
+    }
+
+    public function setStatistics(Statistics $statistics): self
+    {
+        $this->statistics = $statistics;
 
         return $this;
     }

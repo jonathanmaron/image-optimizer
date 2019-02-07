@@ -7,6 +7,7 @@ use Application\Component\Config\Loader\FileLoader\Loader;
 use Application\Component\Finder\Finder;
 use Application\History\History;
 use Application\Optimizer\Optimizer;
+use Application\Statistics\Statistics;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
@@ -47,15 +48,17 @@ class CommandFactory
             }
         }
 
-        $optimizer = new Optimizer(['config' => $config]);
-        $finder    = new Finder(['config' => $config]);
-        $history   = new History();
+        $finder     = new Finder(['config' => $config]);
+        $history    = new History();
+        $optimizer  = new Optimizer(['config' => $config]);
+        $statistics = new Statistics();
 
         $command = new $requestedName;
         $command->setConfig($config);
-        $command->setOptimizer($optimizer);
         $command->setFinder($finder);
         $command->setHistory($history);
+        $command->setOptimizer($optimizer);
+        $command->setStatistics($statistics);
 
         return $command;
     }
