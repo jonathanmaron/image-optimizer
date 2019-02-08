@@ -3,58 +3,35 @@ declare(strict_types=1);
 
 namespace Application\History;
 
+use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 
 class History extends AbstractHistory
 {
     /**
-     * Return a hash of the filename
+     * Return the entity filename, based on the image filename
      *
      * @param $filename
      *
      * @return string
      */
-    public function getHash(string $filename): string
+    public function getEntityFilename(string $filename): string
     {
-        return hash(self::HASH_ALGORITHM, $filename);
-    }
+        $hash = hash(self::HASH_ALGORITHM, $filename);
 
-    /**
-     * Return a hash of the contents of the file
-     *
-     * @param $filename
-     *
-     * @return string
-     */
-    public function getHashFile(string $filename): string
-    {
-        return hash_file(self::HASH_ALGORITHM, $filename);
-    }
-
-    /**
-     * Return the filename in the history directory of the specified hash
-     *
-     * @param $hash
-     *
-     * @return string
-     */
-    public function getHashFilename(string $hash): string
-    {
         $path = $this->getBasePath();
 
-        $chunks = str_split($hash, self::HASH_DIRECTORY_LENGTH);
+        $chunks = str_split($hash, self::ENTITY_DIRECTORY_LENGTH);
 
-        for ($i = 0; $i < self::HASH_DIRECTORY_DEPTH; $i++) {
+        for ($i = 0; $i < self::ENTITY_DIRECTORY_DEPTH; $i++) {
             $path .= DIRECTORY_SEPARATOR . $chunks[$i];
         }
 
-        $ret = $path . DIRECTORY_SEPARATOR . $hash;
-
-        return $ret;
+        return $path . DIRECTORY_SEPARATOR . $hash . '.serialized';
     }
 
     /**
-     * Get the directory in which to store history
+     * Return the directory in which to store entities
      *
      * @return string
      */
@@ -62,7 +39,7 @@ class History extends AbstractHistory
     {
         $filesystem = new Filesystem();
 
-        $ret = getenv('HOME') . DIRECTORY_SEPARATOR . self::HASH_DIRECTORY;
+        $ret = getenv('HOME') . DIRECTORY_SEPARATOR . self::ENTITY_DIRECTORY;
 
         if (!$filesystem->exists($ret)) {
             $filesystem->mkdir($ret, 0700);
@@ -82,17 +59,29 @@ class History extends AbstractHistory
     {
         $filesystem = new Filesystem();
 
-        $hash         = $this->getHash($filename);
-        $hashFilename = $this->getHashFilename($hash);
+        $entityFilename = $this->getEntityFilename($filename);
 
-        if (!$filesystem->exists($hashFilename)) {
+        if (!$filesystem->exists($entityFilename)) {
             return false;
         }
 
         clearStatCache();
 
-        $hashFile = file_get_contents($hashFilename);
-        if ($hashFile !== $this->getHashFile($filename)) {
+        $fileInfo         = new SplFileInfo($filename);
+        $entitySerialized = file_get_contents($entityFilename);
+        $entity           = unserialize($entitySerialized);
+
+        if ($fileInfo->getMTime() !== $entity->getMTime()) {
+            return false;
+        }
+
+        if ($fileInfo->getSize() !== $entity->getSize()) {
+            return false;
+        }
+
+        // relatively slow (keep last)
+        $entityId = Entity::createId($filename);
+        if ($entityId !== $entity->getId()) {
             return false;
         }
 
@@ -110,13 +99,14 @@ class History extends AbstractHistory
     {
         $filesystem = new Filesystem();
 
-        $hash         = $this->getHash($filename);
-        $hashFile     = $this->getHashFile($filename);
-        $hashFilename = $this->getHashFilename($hash);
+        $entityFilename = $this->getEntityFilename($filename);
+        $entityId       = Entity::createId($filename);
 
-        $filesystem->dumpFile($hashFilename, $hashFile);
+        $entity           = new Entity($entityId, $filename);
+        $entitySerialized = serialize($entity);
+        $filesystem->dumpFile($entityFilename, $entitySerialized);
 
-        return $filesystem->exists($hashFilename);
+        return $filesystem->exists($entityFilename);
     }
 
     /**
@@ -130,11 +120,10 @@ class History extends AbstractHistory
     {
         $filesystem = new Filesystem();
 
-        $hash         = $this->getHash($filename);
-        $hashFilename = $this->getHashFilename($hash);
+        $entityFilename = $this->getEntityFilename($filename);
 
-        $filesystem->remove($hashFilename);
+        $filesystem->remove($entityFilename);
 
-        return !$filesystem->exists($hashFilename);
+        return !$filesystem->exists($entityFilename);
     }
 }
