@@ -11,7 +11,7 @@ class LoaderTest extends TestCase
 {
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $paths = [
             APPLICATION_ROOT . '/config',
@@ -23,7 +23,7 @@ class LoaderTest extends TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->loader);
 

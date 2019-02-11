@@ -19,13 +19,9 @@ class OptimizerTest extends AbstractTestCase
     protected static $config
         = [
             'extensions' => [
-                'jpg',
                 'JPG',
-                'jpeg',
                 'JPEG',
-                'png',
                 'PNG',
-                'gif',
                 'GIF',
             ],
             'system'     => [

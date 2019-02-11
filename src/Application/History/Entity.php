@@ -10,7 +10,7 @@ class Entity
      *
      * @var string
      */
-    protected const HASH_ALGORITHM = 'sha512';
+    protected const HASH_ALGORITHM = 'sha256';
 
     /**
      * Entity ID (hash of file contents)
