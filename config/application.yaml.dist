@@ -10,5 +10,5 @@ system:
     Application\System\PngOut:
         active: true
     Application\System\Tinify:
-        active: true
+        active: false
         api_key: null
