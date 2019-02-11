@@ -36,9 +36,9 @@ It is recommended to include `~/bin` in your `PATH` variable:
 so that `image-optimizer` is available to the logged in user globally.
 
 
-## Upgrading From Version 1
+## Upgrading From v1 and v2
 
-Between v1 and v2, the structure of the history directory was updated. Therefore, please remove your current history directory. A new one, with the new structure, will be created when `image-optimizer` is executed for the first time:
+Between v1 and v3, the structure of the history directory was updated. Therefore, please remove your current history directory. A new one, with the new structure, will be created when `image-optimizer` is executed for the first time:
 
     rm -fr ~/.image_optimizer
 
