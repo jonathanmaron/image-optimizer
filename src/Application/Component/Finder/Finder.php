@@ -43,9 +43,11 @@ class Finder extends ParentFinder
         $finder = $this->files();
 
         foreach ($config['extensions'] as $extension) {
-            $format  = '*.%s';
-            $pattern = sprintf($format, $extension);
-            $finder->name($pattern);
+            $format    = '*.%s';
+            $patternLc = sprintf($format, strtolower($extension));
+            $patternUc = sprintf($format, strtoupper($extension));
+            $finder->name($patternLc);
+            $finder->name($patternUc);
         }
 
         foreach ($finder as $fileInfo) {

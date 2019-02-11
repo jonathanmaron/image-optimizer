@@ -1,12 +1,8 @@
 extensions:
     - jpg
-    - JPG
     - jpeg
-    - JPEG
     - png
-    - PNG
     - gif
-    - GIF
 
 system:
     Application\System\GifSicle:
