@@ -18,12 +18,6 @@ class OptimizerTest extends AbstractTestCase
 {
     protected static $config
         = [
-            'extensions' => [
-                'JPG',
-                'JPEG',
-                'PNG',
-                'GIF',
-            ],
             'system'     => [
                 GifSicle::class  => [
                     'active' => true,
