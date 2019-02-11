@@ -3,33 +3,10 @@ declare(strict_types=1);
 
 namespace Application\History;
 
-use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 
 class History extends AbstractHistory
 {
-    /**
-     * Return the entity filename, based on the image filename
-     *
-     * @param $filename
-     *
-     * @return string
-     */
-    public function getEntityFilename(string $filename): string
-    {
-        $hash = hash(self::HASH_ALGORITHM, $filename);
-
-        $path = $this->getBasePath();
-
-        $chunks = str_split($hash, self::ENTITY_DIRECTORY_LENGTH);
-
-        for ($i = 0; $i < self::ENTITY_DIRECTORY_DEPTH; $i++) {
-            $path .= DIRECTORY_SEPARATOR . $chunks[$i];
-        }
-
-        return $path . DIRECTORY_SEPARATOR . $hash . '.serialized';
-    }
-
     /**
      * Return the directory in which to store entities
      *
@@ -46,6 +23,27 @@ class History extends AbstractHistory
         }
 
         return $ret;
+    }
+
+    /**
+     * Return the entity filename, based on the image filename
+     *
+     * @param $filename
+     *
+     * @return string
+     */
+    public function getEntityFilename(string $filename): string
+    {
+        $path = $this->getBasePath();
+
+        $hash   = hash(self::HASH_ALGORITHM, $filename);
+        $chunks = str_split($hash, self::ENTITY_DIRECTORY_LENGTH);
+
+        for ($i = 0; $i < self::ENTITY_DIRECTORY_DEPTH; $i++) {
+            $path .= DIRECTORY_SEPARATOR . $chunks[$i];
+        }
+
+        return $path . DIRECTORY_SEPARATOR . $hash . '.serialized';
     }
 
     /**
@@ -67,25 +65,24 @@ class History extends AbstractHistory
 
         clearStatCache();
 
-        $fileInfo         = new SplFileInfo($filename);
         $entitySerialized = file_get_contents($entityFilename);
         $entity           = unserialize($entitySerialized);
+        $entityClass      = get_class($entity);
 
-        if ($fileInfo->getMTime() !== $entity->getMTime()) {
-            return false;
+        $functions = [
+            'filemtime', // 1 - fast test (inaccurate)
+            'filesize',  // 2 - fast test (inaccurate)
+            'id',        // 3 - slow test (accurate)
+        ];
+
+        foreach ($functions as $function) {
+            $method = sprintf('get%s', ucfirst($function));
+            if ($entityClass::$function($filename) === $entity->$method()) {
+                return true;
+            }
         }
 
-        if ($fileInfo->getSize() !== $entity->getSize()) {
-            return false;
-        }
-
-        // relatively slow (keep last)
-        $entityId = Entity::createId($filename);
-        if ($entityId !== $entity->getId()) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     /**
@@ -98,12 +95,11 @@ class History extends AbstractHistory
     public function setAsOptimized(string $filename): bool
     {
         $filesystem = new Filesystem();
+        $entity     = new Entity($filename);
 
-        $entityFilename = $this->getEntityFilename($filename);
-        $entityId       = Entity::createId($filename);
-
-        $entity           = new Entity($entityId, $filename);
+        $entityFilename   = $this->getEntityFilename($filename);
         $entitySerialized = serialize($entity);
+
         $filesystem->dumpFile($entityFilename, $entitySerialized);
 
         return $filesystem->exists($entityFilename);

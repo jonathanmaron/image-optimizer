@@ -66,6 +66,7 @@ class ImageOptimizerCommand extends AbstractCommand
     protected function main(InputInterface $input, OutputInterface $output): self
     {
         $finder     = $this->getFinder();
+        $formatter  = $this->getNumberFormatter();
         $history    = $this->getHistory();
         $optimizer  = $this->getOptimizer();
         $statistics = $this->getStatistics();
@@ -82,14 +83,14 @@ class ImageOptimizerCommand extends AbstractCommand
             $statistics->resetBytesIn();
             $statistics->resetBytesOut();
 
-            $format  = '[%d/%d] Processing "%s"... ';
-            $message = sprintf($format, $counter, $count, $filename);
+            $format  = '[%s/%s] Processing "%s"... ';
+            $message = sprintf($format, $formatter->format($counter), $formatter->format($count), $filename);
             $output->write($message);
 
             if ($this->getIndexOnly()) {
                 $history->setAsOptimized($filename);
                 $statistics->incrementIndexed();
-                $output->writeLn('Indexed only.');
+                $output->writeLn('Indexed.');
                 continue;
             }
 

@@ -68,12 +68,11 @@ abstract class AbstractCommand extends ParentCommand
 
     protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, Statistics $statistics): self
     {
-        $formatter = new NumberFormatter(locale_get_default(), NumberFormatter::DECIMAL);
-
         $noun = function ($count) {
             return (1 === $count) ? 'file' : 'files';
         };
 
+        $formatter = $this->getNumberFormatter();
         $optimized = $statistics->getOptimized();
         $skipped   = $statistics->getSkipped();
         $indexed   = $statistics->getIndexed();

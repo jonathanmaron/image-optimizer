@@ -10,6 +10,7 @@ use Application\Optimizer\Optimizer;
 use Application\Statistics\Statistics;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use NumberFormatter;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
@@ -28,17 +29,20 @@ class CommandFactory
         ?array $options = null
     ): Command {
 
+        $locale = locale_get_default();
         $config = $this->getConfig();
 
-        $finder     = new Finder(['config' => $config]);
-        $history    = new History();
-        $optimizer  = new Optimizer(['config' => $config]);
-        $statistics = new Statistics();
+        $finder          = new Finder(['config' => $config]);
+        $history         = new History();
+        $numberFormatter = new NumberFormatter($locale, NumberFormatter::DECIMAL);
+        $optimizer       = new Optimizer(['config' => $config]);
+        $statistics      = new Statistics();
 
         $command = new $requestedName;
         $command->setConfig($config);
         $command->setFinder($finder);
         $command->setHistory($history);
+        $command->setNumberFormatter($numberFormatter);
         $command->setOptimizer($optimizer);
         $command->setStatistics($statistics);
 

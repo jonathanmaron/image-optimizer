@@ -13,21 +13,21 @@ abstract class AbstractHistory
     protected const HASH_ALGORITHM = 'sha256';
 
     /**
-     * Directory in which to store entities
+     * Directory in which to store Entities
      *
      * @var string
      */
     protected const ENTITY_DIRECTORY = '.image_optimizer_3.0';
 
     /**
-     * Depth of entity directory
+     * Depth of Entity directory
      *
      * @var integer
      */
     protected const ENTITY_DIRECTORY_DEPTH = 3;
 
     /**
-     * Length of each sub directory name in entity directory
+     * Length of each sub-directory name in Entity directory
      *
      * @var integer
      */

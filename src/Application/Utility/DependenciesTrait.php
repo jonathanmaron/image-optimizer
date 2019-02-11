@@ -7,6 +7,7 @@ use Application\Component\Finder\Finder;
 use Application\History\History;
 use Application\Optimizer\Optimizer;
 use Application\Statistics\Statistics;
+use NumberFormatter;
 
 trait DependenciesTrait
 {
@@ -17,6 +18,8 @@ trait DependenciesTrait
     protected $optimizer;
 
     protected $statistics;
+
+    protected $numberFormatter;
 
     public function getFinder(): Finder
     {
@@ -62,6 +65,18 @@ trait DependenciesTrait
     public function setStatistics(Statistics $statistics): self
     {
         $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    public function getNumberFormatter(): NumberFormatter
+    {
+        return $this->numberFormatter;
+    }
+
+    public function setNumberFormatter(NumberFormatter $numberFormatter): self
+    {
+        $this->numberFormatter = $numberFormatter;
 
         return $this;
     }

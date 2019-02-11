@@ -3,80 +3,107 @@ declare(strict_types=1);
 
 namespace Application\History;
 
-use SplFileInfo;
-
 class Entity
 {
     /**
-     * Algorithm to create hash of file contents
+     * Algorithm to create Entity ID (hash of file contents)
      *
      * @var string
      */
     protected const HASH_ALGORITHM = 'sha512';
 
+    /**
+     * Entity ID (hash of file contents)
+     *
+     * @var string
+     */
     public $id;
 
+    /**
+     * Absolute filename of image file
+     *
+     * @var string
+     */
     public $filename;
 
-    public $perms;
+    /**
+     * Size of image file
+     *
+     * @var int
+     */
+    public $filesize;
 
-    public $owner;
+    /**
+     * Last modified time of image file
+     *
+     * @var int
+     */
+    public $filemtime;
 
-    public $group;
-
-    public $size;
-
-    public $inode;
-
-    public $extension;
-
-    public $aTime;
-
-    public $mTime;
-
-    public $cTime;
-
-    public function __construct(string $id, string $filename)
+    /**
+     * Entity constructor
+     *
+     * @param string $filename
+     */
+    public function __construct(string $filename)
     {
-        $filename = realpath($filename);
-
-        $this->setId($id);
         $this->setFilename($filename);
 
-        $splFileInfo = new SplFileInfo($filename);
-
-        $this->setPerms($splFileInfo->getPerms());
-        $this->setOwner($splFileInfo->getOwner());
-        $this->setGroup($splFileInfo->getGroup());
-
-        $this->setSize($splFileInfo->getSize());
-
-        $this->setInode($splFileInfo->getInode());
-
-        $this->setExtension($splFileInfo->getExtension());
-
-        $this->setATime($splFileInfo->getATime());
-        $this->setMTime($splFileInfo->getMTime());
-        $this->setCTime($splFileInfo->getCTime());
-
-        unset($splFileInfo);
+        $this->setId(self::id($filename));
+        $this->setFilesize(self::filesize($filename));
+        $this->setFilemtime(self::filemtime($filename));
     }
 
-    public static function createId(string $filename): string
+    /**
+     * Return ID for passed file
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    public static function id(string $filename): string
     {
         return hash_file(self::HASH_ALGORITHM, $filename);
     }
 
     /**
-     * @return mixed
+     * Return filesize for passed file
+     *
+     * @param string $filename
+     *
+     * @return int
      */
-    public function getId(): ?string
+    public static function filesize(string $filename): int
+    {
+        return \filesize($filename);
+    }
+
+    /**
+     * Return last modified timestamp for passed file
+     *
+     * @param string $filename
+     *
+     * @return int
+     */
+    public static function filemtime(string $filename): int
+    {
+        return \filemtime($filename);
+    }
+
+    /**
+     * Return Entity ID
+     *
+     * @return string
+     */
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * Set Entity ID
+     *
+     * @param string $id
      *
      * @return Entity
      */
@@ -88,15 +115,19 @@ class Entity
     }
 
     /**
-     * @return bool|string
+     * Return absolute filename of image file
+     *
+     * @return string
      */
-    public function getFilename(): ?string
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
     /**
-     * @param bool|string $filename
+     * Set absolute filename of image file
+     *
+     * @param string $filename
      *
      * @return Entity
      */
@@ -108,181 +139,49 @@ class Entity
     }
 
     /**
+     * Return size of image file
+     *
      * @return int
      */
-    public function getPerms(): int
+    public function getFilesize(): int
     {
-        return $this->perms;
+        return $this->filesize;
     }
 
     /**
-     * @param int $perms
+     * Set size of image file
+     *
+     * @param int $filesize
      *
      * @return Entity
      */
-    public function setPerms(int $perms): self
+    public function setFilesize(int $filesize): self
     {
-        $this->perms = $perms;
+        $this->filesize = $filesize;
 
         return $this;
     }
 
     /**
+     * Return last modified time of image file
+     *
      * @return int
      */
-    public function getOwner(): int
+    public function getFilemtime(): int
     {
-        return $this->owner;
+        return $this->filemtime;
     }
 
     /**
-     * @param int $owner
+     * Set last modified time of image file
+     *
+     * @param int $filemtime
      *
      * @return Entity
      */
-    public function setOwner(int $owner): self
+    public function setFilemtime(int $filemtime): self
     {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGroup(): int
-    {
-        return $this->group;
-    }
-
-    /**
-     * @param int $group
-     *
-     * @return Entity
-     */
-    public function setGroup(int $group): self
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSize(): int
-    {
-        return $this->size;
-    }
-
-    /**
-     * @param int $size
-     *
-     * @return Entity
-     */
-    public function setSize(int $size): self
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getInode(): int
-    {
-        return $this->inode;
-    }
-
-    /**
-     * @param int $inode
-     *
-     * @return Entity
-     */
-    public function setInode(int $inode): self
-    {
-        $this->inode = $inode;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExtension(): string
-    {
-        return $this->extension;
-    }
-
-    /**
-     * @param string $extension
-     *
-     * @return Entity
-     */
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getATime(): int
-    {
-        return $this->aTime;
-    }
-
-    /**
-     * @param int $aTime
-     *
-     * @return Entity
-     */
-    public function setATime(int $aTime): self
-    {
-        $this->aTime = $aTime;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMTime(): int
-    {
-        return $this->mTime;
-    }
-
-    /**
-     * @param int $mTime
-     *
-     * @return Entity
-     */
-    public function setMTime(int $mTime): self
-    {
-        $this->mTime = $mTime;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCTime(): int
-    {
-        return $this->cTime;
-    }
-
-    /**
-     * @param int $cTime
-     *
-     * @return Entity
-     */
-    public function setCTime(int $cTime): self
-    {
-        $this->cTime = $cTime;
+        $this->filemtime = $filemtime;
 
         return $this;
     }
