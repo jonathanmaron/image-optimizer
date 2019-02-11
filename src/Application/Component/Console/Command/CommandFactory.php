@@ -32,7 +32,7 @@ class CommandFactory
         $locale = locale_get_default();
         $config = $this->getConfig();
 
-        $finder          = new Finder(['config' => $config]);
+        $finder          = new Finder();
         $history         = new History();
         $numberFormatter = new NumberFormatter($locale, NumberFormatter::DECIMAL);
         $optimizer       = new Optimizer(['config' => $config]);

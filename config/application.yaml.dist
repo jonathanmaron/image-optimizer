@@ -1,9 +1,3 @@
-extensions:
-    - jpg
-    - jpeg
-    - png
-    - gif
-
 system:
     Application\System\GifSicle:
         active: true

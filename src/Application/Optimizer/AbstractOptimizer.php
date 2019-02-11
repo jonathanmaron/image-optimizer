@@ -14,28 +14,28 @@ abstract class AbstractOptimizer
      *
      * @var string
      */
-    protected const EXTENSION_PNG = 'png';
+    public const EXTENSION_PNG = 'png';
 
     /**
      * JPG image filename extension
      *
      * @var string
      */
-    protected const EXTENSION_JPG = 'jpg';
+    public const EXTENSION_JPG = 'jpg';
 
     /**
      * JPEG image filename extension
      *
      * @var string
      */
-    protected const EXTENSION_JPEG = 'jpeg';
+    public const EXTENSION_JPEG = 'jpeg';
 
     /**
      * GIF image filename extension
      *
      * @var string
      */
-    protected const EXTENSION_GIF = 'gif';
+    public const EXTENSION_GIF = 'gif';
 
     /**
      * Return true is className is active
