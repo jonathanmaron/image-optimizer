@@ -21,11 +21,7 @@ class Loader extends FileLoader
             return false;
         }
 
-        if (1 === preg_match('/(.*)\.yaml$/', $resource)) {
-            return true;
-        }
-
-        if (1 === preg_match('/(.*)\.yaml\.dist$/', $resource)) {
+        if (1 === preg_match('/(.*)\.yaml(\.dist)?$/', $resource)) {
             return true;
         }
 
