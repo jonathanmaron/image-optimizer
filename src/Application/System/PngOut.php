@@ -10,7 +10,7 @@ class PngOut extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    private const EXEC = '/usr/bin/pngout';
+    protected const EXEC = '/usr/bin/pngout';
 
     /**
      * PngOut constructor

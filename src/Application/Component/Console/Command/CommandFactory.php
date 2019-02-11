@@ -17,7 +17,7 @@ use Symfony\Component\Console\Command\Command;
 
 class CommandFactory
 {
-    private const CONFIG_FILES
+    protected const CONFIG_FILES
         = [
             'application.yaml.dist',
             'application.yaml',
@@ -49,7 +49,7 @@ class CommandFactory
         return $command;
     }
 
-    private function getConfig(): array
+    protected function getConfig(): array
     {
         $ret = [];
 

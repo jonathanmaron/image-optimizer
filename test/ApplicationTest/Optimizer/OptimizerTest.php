@@ -57,7 +57,7 @@ class OptimizerTest extends AbstractTestCase
         parent::tearDown();
     }
 
-    private function getTestAssetWorkingPath(): string
+    protected function getTestAssetWorkingPath(): string
     {
         $finder     = new Finder(['config' => self::$config]);
         $filesystem = new Filesystem();

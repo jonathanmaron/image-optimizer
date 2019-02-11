@@ -10,7 +10,7 @@ class PngCrush extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    private const EXEC = '/usr/bin/pngcrush';
+    protected const EXEC = '/usr/bin/pngcrush';
 
     /**
      * PngCrush constructor

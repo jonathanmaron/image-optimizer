@@ -19,9 +19,9 @@ abstract class AbstractCommand extends ParentCommand
     use ConfigTrait;
     use DependenciesTrait;
 
-    private const BANNER_START = 'banner_start';
+    protected const BANNER_START = 'banner_start';
 
-    private const BANNER_END   = 'banner_end';
+    protected const BANNER_END   = 'banner_end';
 
     protected function execute(InputInterface $input, OutputInterface $output): self
     {

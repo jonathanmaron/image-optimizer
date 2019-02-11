@@ -14,7 +14,7 @@ abstract class AbstractSystem
      *
      * @var int
      */
-    private const TIMEOUT = 3600;
+    protected const TIMEOUT = 3600;
 
     /**
      * Return true, if executable is installed. False otherwise.

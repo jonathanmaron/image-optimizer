@@ -9,7 +9,7 @@ use Symfony\Component\Config\FileLocator;
 
 class LoaderTest extends TestCase
 {
-    private $loader;
+    protected $loader;
 
     protected function setUp(): void
     {

@@ -10,7 +10,7 @@ class JpegTran extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    private const EXEC = '/usr/bin/jpegtran';
+    protected const EXEC = '/usr/bin/jpegtran';
 
     /**
      * JpegTran constructor

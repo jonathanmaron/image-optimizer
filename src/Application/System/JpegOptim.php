@@ -10,7 +10,7 @@ class JpegOptim extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    private const EXEC = '/usr/bin/jpegoptim';
+    protected const EXEC = '/usr/bin/jpegoptim';
 
     /**
      * JpegOptim constructor
