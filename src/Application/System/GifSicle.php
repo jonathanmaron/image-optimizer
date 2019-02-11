@@ -10,7 +10,7 @@ class GifSicle extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    const EXEC = '/usr/bin/gifsicle';
+    protected const EXEC = '/usr/bin/gifsicle';
 
     /**
      * GifSicle constructor
