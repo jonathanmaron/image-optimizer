@@ -15,7 +15,7 @@ use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
 
-class CommandFactory
+class Factory
 {
     protected const CONFIG_FILES
         = [

@@ -8,9 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImageOptimizerCommand extends AbstractCommand
+class Command extends AbstractCommand
 {
-    protected function configure(): self
+    protected function configure(): void
     {
         $this->setName('image-optimizer');
 
@@ -41,10 +41,10 @@ class ImageOptimizerCommand extends AbstractCommand
 
         $this->addOption($name, $shortcut, $mode, $description);
 
-        return $this;
+        return;
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output): self
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $path = (string) $input->getOption('path');
         $path = trim($path);
@@ -60,10 +60,10 @@ class ImageOptimizerCommand extends AbstractCommand
         $force = (bool) $input->getOption('force');
         $this->setForce($force);
 
-        return $this;
+        return;
     }
 
-    protected function main(InputInterface $input, OutputInterface $output): self
+    protected function main(InputInterface $input, OutputInterface $output): int
     {
         $finder     = $this->getFinder();
         $formatter  = $this->getNumberFormatter();
@@ -119,6 +119,6 @@ class ImageOptimizerCommand extends AbstractCommand
 
         $this->bannerGrandTotals($input, $output, $statistics);
 
-        return $this;
+        return 1;
     }
 }

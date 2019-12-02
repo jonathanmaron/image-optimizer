@@ -104,19 +104,17 @@ class OptimizerTest extends AbstractTestCase
         $filesystem->remove($workingPath);
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testOptimizeImageExceptionIsThrownOnNonExistentFilename(): void
     {
+        $this->expectException(RuntimeException::class);
+
         $this->optimizer->optimize('invalid.abc');
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testOptimizeImageExceptionIsThrownOnUnsupportedFileType(): void
     {
+        $this->expectException(RuntimeException::class);
+
         $filesystem = new Filesystem();
         $filename   = sys_get_temp_dir() . '/invalid.abc';
         $filesystem->touch($filename);

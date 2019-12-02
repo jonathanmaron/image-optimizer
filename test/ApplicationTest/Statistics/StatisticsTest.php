@@ -9,14 +9,14 @@ class StatisticsTest extends AbstractTestCase
 {
     protected $statistics;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->statistics = new Statistics();
 
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->statistics);
 

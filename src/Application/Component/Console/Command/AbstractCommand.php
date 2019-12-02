@@ -23,16 +23,16 @@ abstract class AbstractCommand extends ParentCommand
 
     protected const BANNER_END   = 'banner_end';
 
-    protected function execute(InputInterface $input, OutputInterface $output): self
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $this->banner($input, $output, self::BANNER_START);
         $this->main($input, $output);
         $this->banner($input, $output, self::BANNER_END);
 
-        return $this;
+        return;
     }
 
-    protected function banner(InputInterface $input, OutputInterface $output, string $type): self
+    protected function banner(InputInterface $input, OutputInterface $output, string $type): void
     {
         $timestamp = time();
         $execution = microtime(true) - REQUEST_MICROTIME;
@@ -63,10 +63,10 @@ abstract class AbstractCommand extends ParentCommand
 
         $output->writeln($messages);
 
-        return $this;
+        return;
     }
 
-    protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, Statistics $statistics): self
+    protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, Statistics $statistics): void
     {
         $noun = function ($count) {
             return (1 === $count) ? 'file' : 'files';
@@ -97,6 +97,6 @@ abstract class AbstractCommand extends ParentCommand
         ];
         $output->writeLn($messages);
 
-        return $this;
+        return;
     }
 }

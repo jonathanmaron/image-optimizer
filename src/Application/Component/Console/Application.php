@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Application\Component\Console;
 
-use Application\Component\Console\Command\ACommand;
-use Application\Component\Console\Command\CCommand;
-use Application\Component\Console\Command\CommandFactory;
-use Application\Component\Console\Command\ImageOptimizerCommand;
+use Application\Component\Console\Command\Factory;
+use Application\Component\Console\Command\Command;
 use Symfony\Component\Console\Application as ParentApplication;
 
 class Application extends ParentApplication
@@ -16,16 +14,15 @@ class Application extends ParentApplication
         $ret = parent::getDefaultCommands();
 
         $commands = [
-            ImageOptimizerCommand::class,
+            Command::class,
         ];
 
         $container = null;
         $options   = [];
 
         foreach ($commands as $requestedName) {
-            $instance = new CommandFactory();
-            $command  = $instance($container, $requestedName, $options);
-            array_push($ret, $command);
+            $instance = new Factory();
+            $ret[]    = $instance($container, $requestedName, $options);
         }
 
         return $ret;

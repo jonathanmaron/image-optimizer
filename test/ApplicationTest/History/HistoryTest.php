@@ -29,8 +29,8 @@ class HistoryTest extends AbstractTestCase
         $expected2 = '.image_optimizer_3.0';
         $actual    = $this->history->getBasePath();
 
-        $this->assertContains($expected1, $actual);
-        $this->assertContains($expected2, $actual);
+        $this->assertStringContainsString($expected1, $actual);
+        $this->assertStringContainsString($expected2, $actual);
     }
 
     public function testGetEntityFilename(): void
@@ -41,8 +41,8 @@ class HistoryTest extends AbstractTestCase
         $expected2 = '/48/d1/04/48d10460971376c6fe3d5bbf5d3af2443aff9aade89d2f036eb1a879eea2d15e.serialized';
         $actual    = $this->history->getEntityFilename($filename);
 
-        $this->assertContains($expected1, $actual);
-        $this->assertContains($expected2, $actual);
+        $this->assertStringContainsString($expected1, $actual);
+        $this->assertStringContainsString($expected2, $actual);
     }
 
     public function testImageStatus(): void

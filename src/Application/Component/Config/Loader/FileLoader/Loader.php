@@ -8,14 +8,14 @@ use Symfony\Component\Yaml\Yaml;
 
 class Loader extends FileLoader
 {
-    public function load($resource, $type = null): array
+    public function load($resource, string $type = null): array
     {
         $buffer = file_get_contents($resource);
 
         return (array) Yaml::parse($buffer);
     }
 
-    public function supports($resource, $type = null): bool
+    public function supports($resource, string $type = null): bool
     {
         if (!is_string($resource)) {
             return false;
