@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Application\Component\Console\Command;
+namespace Application\Component\Console\ImageOptimizerCommand;
 
 use Application\Exception\RuntimeException;
 use Application\Statistics\Statistics;

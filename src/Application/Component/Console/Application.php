@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Application\Component\Console;
 
-use Application\Component\Console\Command\Factory;
-use Application\Component\Console\Command\Command;
+use Application\Component\Console\ImageOptimizerCommand\Factory;
+use Application\Component\Console\ImageOptimizerCommand\Command;
 use Symfony\Component\Console\Application as ParentApplication;
 
 class Application extends ParentApplication
