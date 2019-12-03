@@ -16,6 +16,9 @@
     ],
     "homepage": "https://github.com/jonathanmaron/image-optimizer",
     "autoload": {
+        "files": [
+            "bootstrap.php"
+        ],
         "psr-4": {
             "Application\\": "src/Application"
         }
