@@ -23,13 +23,13 @@ abstract class AbstractCommand extends ParentCommand
 
     protected const BANNER_END   = 'banner_end';
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->banner($input, $output, self::BANNER_START);
         $this->main($input, $output);
         $this->banner($input, $output, self::BANNER_END);
 
-        return;
+        return 1;
     }
 
     protected function banner(InputInterface $input, OutputInterface $output, string $type): void
