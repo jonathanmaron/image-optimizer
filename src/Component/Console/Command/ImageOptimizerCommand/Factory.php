@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Application\Component\Console\ImageOptimizerCommand;
+namespace Application\Component\Console\Command\ImageOptimizerCommand;
 
 use Application\Component\Config\Loader\FileLoader\Loader;
 use Application\Component\Finder\Finder;

@@ -20,7 +20,7 @@
             "bootstrap.php"
         ],
         "psr-4": {
-            "Application\\": "src/Application"
+            "Application\\": "src"
         }
     },
     "autoload-dev": {
