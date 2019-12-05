@@ -119,6 +119,6 @@ class Command extends AbstractCommand
 
         $this->bannerGrandTotals($input, $output, $statistics);
 
-        return 1;
+        return 0;
     }
 }
