@@ -30,7 +30,7 @@
     },
     "require": {
         "php": "^7.4",
-        "container-interop/container-interop": "^1.2",
+        "psr/container": "^1.0",
         "symfony/config": "^5.0",
         "symfony/console": "^5.0",
         "symfony/filesystem": "^5.0",
