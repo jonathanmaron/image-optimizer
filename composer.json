@@ -1,8 +1,7 @@
 {
     "name": "jonathanmaron/image-optimizer",
-    "description": "Image optimization and compression tool for the console. This tool optimizes PNG, JPEG and GIF files, using 'gifsicle', 'jpegoptim', 'jpegtran', 'pngcrush' and 'pngout' and can usually reduce the filesize by 10% to 70%.",
-    "license": "BSD-3-Clause",
     "type": "project",
+    "description": "Image optimization and compression tool for the console. This tool optimizes PNG, JPEG and GIF files, using 'gifsicle', 'jpegoptim', 'jpegtran', 'pngcrush' and 'pngout' and can usually reduce the filesize by 10% to 70%.",
     "keywords": [
         "image optimizer",
         "compression",
@@ -15,19 +14,7 @@
         "pngout"
     ],
     "homepage": "https://github.com/jonathanmaron/image-optimizer",
-    "autoload": {
-        "files": [
-            "bootstrap.php"
-        ],
-        "psr-4": {
-            "Application\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ApplicationTest\\": "test/ApplicationTest"
-        }
-    },
+    "license": "BSD-3-Clause",
     "require": {
         "php": "^7.4",
         "psr/container": "^1.0",
@@ -44,8 +31,21 @@
         "squizlabs/php_codesniffer": "^3.3",
         "symfony/var-dumper": "^5.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "src"
+        },
+        "files": [
+            "bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApplicationTest\\": "test/ApplicationTest"
+        }
+    },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml"
+        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml",
+        "test": "vendor/bin/phpunit"
     }
 }
