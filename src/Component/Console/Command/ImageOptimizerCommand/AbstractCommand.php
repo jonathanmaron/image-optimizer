@@ -29,7 +29,7 @@ abstract class AbstractCommand extends ParentCommand
         $this->main($input, $output);
         $this->banner($input, $output, self::BANNER_END);
 
-        return 1;
+        return 0;
     }
 
     protected function banner(InputInterface $input, OutputInterface $output, string $type): void
