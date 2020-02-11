@@ -62,16 +62,18 @@ abstract class AbstractSystem
 
         $process = new Process($command);
         $process->setTimeout($timeout);
-        $process->run();
 
-        /*
+
+
         dump('---');
         dump($process->getCommandLine());
-        dump($process->getOutput());
-        dump($process->getErrorOutput());
-        dump($process->getExitCode());
+        //dump($process->getOutput());
+        //dump($process->getErrorOutput());
+        //dump($process->getExitCode());
         dump('---');
-        */
+
+
+        $process->run();
 
         return $process->isSuccessful();
     }
