@@ -58,18 +58,20 @@ abstract class AbstractSystem
      */
     protected function execute(array $command): bool
     {
+        $timeout = (float) self::TIMEOUT;
+
         $process = new Process($command);
-        $process->setTimeout(self::TIMEOUT);
+        $process->setTimeout($timeout);
         $process->run();
 
-
+        /*
         dump('---');
         dump($process->getCommandLine());
         dump($process->getOutput());
         dump($process->getErrorOutput());
         dump($process->getExitCode());
         dump('---');
-
+        */
 
         return $process->isSuccessful();
     }

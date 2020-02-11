@@ -42,6 +42,8 @@ class Optimizer extends AbstractOptimizer
     {
         $filesystem = new Filesystem();
 
+        dump($filename);
+
         if (!$filesystem->exists($filename)) {
             $format  = "'%s' does not exist";
             $message = sprintf($format, $filename);
