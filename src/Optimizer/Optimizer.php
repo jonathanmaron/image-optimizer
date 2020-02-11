@@ -42,8 +42,6 @@ class Optimizer extends AbstractOptimizer
     {
         $filesystem = new Filesystem();
 
-        dump($filename);
-
         if (!$filesystem->exists($filename)) {
             $format  = "'%s' does not exist";
             $message = sprintf($format, $filename);
@@ -98,6 +96,8 @@ class Optimizer extends AbstractOptimizer
                 $optimizer->optimize($filename);
             }
         }
+
+        dump(__METHOD__);
 
         $className = Tinify::class;
         if ($this->isActive($className)) {
