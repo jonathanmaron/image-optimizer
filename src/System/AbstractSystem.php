@@ -62,14 +62,14 @@ abstract class AbstractSystem
         $process->setTimeout(self::TIMEOUT);
         $process->run();
 
-        /*
+
         dump('---');
         dump($process->getCommandLine());
         dump($process->getOutput());
         dump($process->getErrorOutput());
         dump($process->getExitCode());
         dump('---');
-        */
+
 
         return $process->isSuccessful();
     }
