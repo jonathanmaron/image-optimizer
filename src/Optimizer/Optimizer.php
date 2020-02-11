@@ -97,8 +97,6 @@ class Optimizer extends AbstractOptimizer
             }
         }
 
-        dump(__METHOD__);
-
         $className = Tinify::class;
         if ($this->isActive($className)) {
             $config = $this->getConfig();
