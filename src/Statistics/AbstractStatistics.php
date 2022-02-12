@@ -10,49 +10,49 @@ abstract class AbstractStatistics
      *
      * @var int
      */
-    protected $skipped = 0;
+    protected int $skipped = 0;
 
     /**
      * Optimized files counter
      *
      * @var int
      */
-    protected $optimized = 0;
+    protected int $optimized = 0;
 
     /**
      * Indexed files counter
      *
      * @var int
      */
-    protected $indexed = 0;
+    protected int $indexed = 0;
 
     /**
      * Number of bytes before optimization
      *
      * @var int
      */
-    protected $bytesIn = 0;
+    protected int $bytesIn = 0;
 
     /**
      * Number of bytes after optimization
      *
      * @var int
      */
-    protected $bytesOut = 0;
+    protected int $bytesOut = 0;
 
     /**
      * Total number of bytes before optimization
      *
      * @var int
      */
-    protected $totalBytesIn = 0;
+    protected int $totalBytesIn = 0;
 
     /**
      * Total number of bytes after optimization
      *
      * @var int
      */
-    protected $totalBytesOut = 0;
+    protected int $totalBytesOut = 0;
 
     /**
      * Calculate percentage

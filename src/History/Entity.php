@@ -17,28 +17,28 @@ class Entity
      *
      * @var string
      */
-    protected $id;
+    protected string $id;
 
     /**
      * Absolute filename of image file
      *
      * @var string
      */
-    protected $filename;
+    protected string $filename;
 
     /**
      * Size of image file
      *
      * @var int
      */
-    protected $filesize;
+    protected int $filesize;
 
     /**
      * Last modified time of image file
      *
      * @var int
      */
-    protected $filemtime;
+    protected int $filemtime;
 
     /**
      * Entity constructor

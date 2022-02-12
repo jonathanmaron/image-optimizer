@@ -38,8 +38,6 @@ class PngOut extends AbstractSystem implements InterfaceSystem
             '-v',
         ];
 
-        $ret = $this->execute($command);
-
-        return $ret;
+        return $this->execute($command);
     }
 }

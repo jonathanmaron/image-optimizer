@@ -11,15 +11,15 @@ use NumberFormatter;
 
 trait DependenciesTrait
 {
-    protected $finder;
+    protected Finder          $finder;
 
-    protected $history;
+    protected History         $history;
 
-    protected $optimizer;
+    protected Optimizer       $optimizer;
 
-    protected $statistics;
+    protected Statistics      $statistics;
 
-    protected $numberFormatter;
+    protected NumberFormatter $numberFormatter;
 
     public function getFinder(): Finder
     {

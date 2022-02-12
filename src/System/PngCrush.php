@@ -47,6 +47,6 @@ class PngCrush extends AbstractSystem implements InterfaceSystem
         $ret1 = $this->execute($command);
         $ret2 = $this->rename($tempFilename, $filename);
 
-        return ($ret1 && $ret2);
+        return $ret1 && $ret2;
     }
 }

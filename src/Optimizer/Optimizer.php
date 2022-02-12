@@ -18,7 +18,7 @@ class Optimizer extends AbstractOptimizer
     /**
      * Optimizer constructor
      *
-     * @param $options
+     * @param array $options
      */
     public function __construct(array $options)
     {
@@ -85,7 +85,7 @@ class Optimizer extends AbstractOptimizer
     protected function optimizePng(string $filename, Filesystem $filesystem): bool
     {
         $classNames = [
-            //PngOut::class, //@todo Segmentation fault
+            PngOut::class,
             PngCrush::class,
         ];
 

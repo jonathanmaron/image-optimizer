@@ -40,8 +40,6 @@ class JpegOptim extends AbstractSystem implements InterfaceSystem
             $filename,
         ];
 
-        $ret = $this->execute($command);
-
-        return $ret;
+        return $this->execute($command);
     }
 }

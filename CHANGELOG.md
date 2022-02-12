@@ -2,6 +2,7 @@
 
 ## dev-master
 
+* Updated to Symfony 6.0 components.
 * Updated to Symfony 4.2 components.
 * Improved unit tests.
 * Improved documentation.

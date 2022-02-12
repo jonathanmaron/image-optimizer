@@ -46,6 +46,6 @@ class JpegTran extends AbstractSystem implements InterfaceSystem
         $ret1 = $this->execute($command);
         $ret2 = $this->rename($tempFilename, $filename, true);
 
-        return ($ret1 && $ret2);
+        return $ret1 && $ret2;
     }
 }
