@@ -67,7 +67,6 @@ class Optimizer extends AbstractOptimizer
                 $format  = "Unsupported image file type '%s'";
                 $message = sprintf($format, $filename);
                 throw new RuntimeException($message);
-                break;
         }
 
         $filesystem->chmod($filename, $mode);
@@ -86,7 +85,7 @@ class Optimizer extends AbstractOptimizer
     protected function optimizePng(string $filename, Filesystem $filesystem): bool
     {
         $classNames = [
-            PngOut::class,
+            //PngOut::class, //@todo Segmentation fault
             PngCrush::class,
         ];
 

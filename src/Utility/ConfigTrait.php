@@ -5,7 +5,7 @@ namespace Application\Utility;
 
 trait ConfigTrait
 {
-    protected $config = [];
+    protected array $config = [];
 
     public function getConfig(): array
     {

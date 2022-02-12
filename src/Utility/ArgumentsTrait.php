@@ -5,11 +5,11 @@ namespace Application\Utility;
 
 trait ArgumentsTrait
 {
-    protected $path      = '';
+    protected string $path = '';
 
-    protected $indexOnly = false;
+    protected bool $indexOnly = false;
 
-    protected $force     = false;
+    protected bool $force = false;
 
     public function getPath(): string
     {

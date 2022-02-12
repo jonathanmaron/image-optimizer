@@ -29,7 +29,7 @@ abstract class AbstractCommand extends ParentCommand
         $this->main($input, $output);
         $this->banner($input, $output, self::BANNER_END);
 
-        return 0;
+        return self::SUCCESS;
     }
 
     protected function banner(InputInterface $input, OutputInterface $output, string $type): void
@@ -41,29 +41,26 @@ abstract class AbstractCommand extends ParentCommand
             case self::BANNER_START:
                 $command  = $input->getArgument('command');
                 $messages = [
-                    null,
+                    '',
                     sprintf('## Command    : %s', $command),
                     sprintf('## Start time : %s', date('r', $timestamp)),
-                    null,
+                    '',
                 ];
                 break;
             case self::BANNER_END:
                 $messages = [
-                    null,
+                    '',
                     sprintf('## End time       : %s', date('r', $timestamp)),
                     sprintf('## Execution time : %0.4f s', $execution),
-                    null,
+                    '',
                 ];
                 break;
             default:
                 $message = 'Invalid banner type';
                 throw new RuntimeException($message);
-                break;
         }
 
         $output->writeln($messages);
-
-        return;
     }
 
     protected function bannerGrandTotals(InputInterface $input, OutputInterface $output, Statistics $statistics): void
@@ -84,19 +81,17 @@ abstract class AbstractCommand extends ParentCommand
         $totalBytesDiffAsPct = $statistics->getTotalBytesDifferenceAsPercentage();
 
         $messages = [
-            null,
+            '',
             sprintf('Total     : %s %s', $formatter->format($total), $noun($total)),
-            null,
+            '',
             sprintf('Optimized : %s %s', $formatter->format($optimized), $noun($optimized)),
             sprintf('Skipped   : %s %s', $formatter->format($skipped), $noun($skipped)),
             sprintf('Indexed   : %s %s', $formatter->format($indexed), $noun($indexed)),
-            null,
+            '',
             sprintf('In        : %s b', $formatter->format($totalBytesIn)),
             sprintf('Out       : %s b', $formatter->format($totalBytesOut)),
             sprintf('Diff      : %s b (%01.4f %%)', $formatter->format($totalBytesDiff), $totalBytesDiffAsPct),
         ];
         $output->writeLn($messages);
-
-        return;
     }
 }

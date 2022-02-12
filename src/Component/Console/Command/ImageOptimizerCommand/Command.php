@@ -40,8 +40,6 @@ class Command extends AbstractCommand
         $description = 'Always optimize images, ignoring history.';
 
         $this->addOption($name, $shortcut, $mode, $description);
-
-        return;
     }
 
     protected function interact(InputInterface $input, OutputInterface $output): void
@@ -59,8 +57,6 @@ class Command extends AbstractCommand
 
         $force = (bool) $input->getOption('force');
         $this->setForce($force);
-
-        return;
     }
 
     protected function main(InputInterface $input, OutputInterface $output): int
@@ -119,6 +115,6 @@ class Command extends AbstractCommand
 
         $this->bannerGrandTotals($input, $output, $statistics);
 
-        return 0;
+        return self::SUCCESS;
     }
 }
