@@ -1,7 +1,8 @@
 {
     "name": "jonathanmaron/image-optimizer",
-    "type": "project",
     "description": "Image optimization and compression tool for the console. This tool optimizes PNG, JPEG and GIF files, using 'gifsicle', 'jpegoptim', 'jpegtran', 'pngcrush' and 'pngout' and can usually reduce the filesize by 10% to 70%.",
+    "license": "BSD-3-Clause",
+    "type": "project",
     "keywords": [
         "image optimizer",
         "compression",
@@ -14,7 +15,6 @@
         "pngout"
     ],
     "homepage": "https://github.com/jonathanmaron/image-optimizer",
-    "license": "BSD-3-Clause",
     "require": {
         "php": "^8.1",
         "ext-intl": "*",
@@ -47,13 +47,13 @@
             "ApplicationTest\\": "test/ApplicationTest"
         }
     },
-    "scripts": {
-        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml",
-        "test": "vendor/bin/phpunit"
-    },
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true
         }
+    },
+    "scripts": {
+        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml",
+        "test": "vendor/bin/phpunit"
     }
 }
