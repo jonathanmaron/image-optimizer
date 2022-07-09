@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Application\System;
 
+use Application\Exception\InvalidArgumentException;
 use Throwable;
 use Tinify\AccountException;
 use Tinify\ClientException;
@@ -20,14 +21,14 @@ class Tinify extends AbstractSystem implements InterfaceSystem
      *
      * @var string
      */
-    protected $apiKey;
+    protected string $apiKey;
 
     /**
      * Tinify constructor
      *
-     * @param $options
+     * @param array $options
      */
-    public function __construct($options)
+    public function __construct(array $options)
     {
         if (!array_key_exists('api_key', $options)) {
             $format  = "Missing 'api_key' key in 'options' array at '%s'";
@@ -41,9 +42,9 @@ class Tinify extends AbstractSystem implements InterfaceSystem
     /**
      * Get Tinify API key
      *
-     * @return string|null
+     * @return string
      */
-    public function getApiKey(): ?string
+    public function getApiKey(): string
     {
         return $this->apiKey;
     }
@@ -71,8 +72,6 @@ class Tinify extends AbstractSystem implements InterfaceSystem
      */
     public function optimize(string $filename): bool
     {
-        $ret = false;
-
         try {
             setKey($this->getApiKey());
             validate();
@@ -83,9 +82,10 @@ class Tinify extends AbstractSystem implements InterfaceSystem
         }
 
         if (!$apiKeyIsValid) {
-            return $ret;
+            return false;
         }
 
+        $ret = false;
         try {
             $tinify = fromFile($filename);
             $ret    = is_int($tinify->toFile($filename));

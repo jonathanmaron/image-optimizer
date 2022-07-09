@@ -35,7 +35,7 @@ class Finder extends ParentFinder
         }
 
         foreach ($finder as $fileInfo) {
-            $ret[] = (string) $fileInfo->getPathname();
+            $ret[] = $fileInfo->getPathname();
         }
 
         sort($ret, SORT_NATURAL);

@@ -2,7 +2,12 @@
 
 <ruleset name="PHPCSStandard">
 
-    <description>PSR-2 (minus 2 rules not defined in PSR-2).</description>
+    <description>PSR-2</description>
+
+    <file>bin</file>
+    <file>config</file>
+    <file>src</file>
+    <file>test</file>
 
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="100"/>
@@ -11,12 +16,12 @@
 
     <rule ref="PSR2"/>
 
-    <!-- this rule is not PSR-2 and degrades code legibility if enforced -->
+    <!-- this rule is not PSR-2, but degrades code legibility, if enforced -->
     <rule ref="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen">
         <severity>0</severity>
     </rule>
 
-    <!-- this rule is not PSR-2 and degrades code legibility if enforced -->
+    <!-- this rule is not PSR-2, but degrades code legibility, if enforced -->
     <rule ref="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose">
         <severity>0</severity>
     </rule>

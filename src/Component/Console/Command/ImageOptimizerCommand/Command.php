@@ -44,18 +44,23 @@ class Command extends AbstractCommand
 
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
-        $path = (string) $input->getOption('path');
-        $path = trim($path);
+        $path = $input->getOption('path');
+        assert(is_string($path));
+
         if (!is_readable($path)) {
             $message = "The '--path' option is missing or invalid.";
             throw new RuntimeException($message);
         }
-        $this->setPath(realpath($path));
+        $realpath = realpath($path);
+        assert(is_string($realpath));
+        $this->setPath($realpath);
 
-        $indexOnly = (bool) $input->getOption('index-only');
+        $indexOnly = $input->getOption('index-only');
+        assert(is_bool($indexOnly));
         $this->setIndexOnly($indexOnly);
 
-        $force = (bool) $input->getOption('force');
+        $force = $input->getOption('force');
+        assert(is_bool($force));
         $this->setForce($force);
     }
 
@@ -86,7 +91,7 @@ class Command extends AbstractCommand
             if ($this->getIndexOnly()) {
                 $history->setAsOptimized($filename);
                 $statistics->incrementIndexed();
-                $output->writeLn('Indexed.');
+                $output->writeln('Indexed.');
                 continue;
             }
 
@@ -96,13 +101,18 @@ class Command extends AbstractCommand
                 continue;
             }
 
-            $statistics->setBytesIn(filesize($filename));
+            $bytesIn = filesize($filename);
+            assert(is_int($bytesIn));
+
+            $statistics->setBytesIn($bytesIn);
 
             if ($optimizer->optimize($filename)) {
 
-                clearStatCache();
+                clearstatcache();
 
-                $statistics->setBytesOut(filesize($filename));
+                $bytesOut = filesize($filename);
+                assert(is_int($bytesOut));
+                $statistics->setBytesOut($bytesOut);
 
                 $format  = 'Saving: %01.4f %%.';
                 $message = sprintf($format, $statistics->getBytesDifferenceAsPercentage());

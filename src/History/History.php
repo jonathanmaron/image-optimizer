@@ -28,7 +28,7 @@ class History extends AbstractHistory
     /**
      * Return the entity filename, based on the image filename
      *
-     * @param $filename
+     * @param string $filename
      *
      * @return string
      */
@@ -49,7 +49,7 @@ class History extends AbstractHistory
     /**
      * Return true, if an image filename has already been optimized
      *
-     * @param $filename
+     * @param string $filename
      *
      * @return bool
      */
@@ -63,11 +63,15 @@ class History extends AbstractHistory
             return false;
         }
 
-        clearStatCache();
+        clearstatcache();
 
         $entitySerialized = file_get_contents($entityFilename);
-        $entity           = unserialize($entitySerialized);
-        $entityClass      = get_class($entity);
+        assert(is_string($entitySerialized));
+
+        $entity = unserialize($entitySerialized);
+        assert(is_object($entity));
+
+        $entityClass = get_class($entity);
 
         $functions = [
             'filemtime', // 1 - fast test (inaccurate)
@@ -88,7 +92,7 @@ class History extends AbstractHistory
     /**
      * Mark the image filename as 'optimized'
      *
-     * @param $filename
+     * @param string $filename
      *
      * @return bool
      */
@@ -108,7 +112,7 @@ class History extends AbstractHistory
     /**
      * Mark the image filename as 'unoptimized'
      *
-     * @param $filename
+     * @param string $filename
      *
      * @return bool
      */

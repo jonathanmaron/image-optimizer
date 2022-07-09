@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class OptimizerTest extends AbstractTestCase
 {
-    protected static $config
+    protected static array $config
         = [
             'system'     => [
                 GifSicle::class  => [
@@ -41,7 +41,7 @@ class OptimizerTest extends AbstractTestCase
             ],
         ];
 
-    protected $optimizer;
+    protected Optimizer $optimizer;
 
     protected function setUp(): void
     {
@@ -59,7 +59,7 @@ class OptimizerTest extends AbstractTestCase
 
     protected function getTestAssetWorkingPath(): string
     {
-        $finder     = new Finder(['config' => self::$config]);
+        $finder     = new Finder();
         $filesystem = new Filesystem();
 
         $rand       = (string) random_int(PHP_INT_MIN, PHP_INT_MAX);
@@ -85,20 +85,20 @@ class OptimizerTest extends AbstractTestCase
 
     public function testOptimizeImage(): void
     {
-        $finder     = new Finder(['config' => self::$config]);
+        $finder     = new Finder();
         $filesystem = new Filesystem();
 
         $workingPath = $this->getTestAssetWorkingPath();
         $finder      = $finder->in($workingPath);
 
-        array_map(function ($filename) use ($workingPath) {
+        array_map(function ($filename) {
             $mode     = fileperms($filename);
             $filesize = filesize($filename);
             $actual   = $this->optimizer->optimize($filename);
-            $this->assertTrue($actual);
-            clearStatCache();
-            $this->assertEquals($mode, fileperms($filename));
-            $this->assertLessThanOrEqual($filesize, filesize($filename));
+            self::assertTrue($actual);
+            clearstatcache();
+            self::assertEquals($mode, fileperms($filename));
+            self::assertLessThanOrEqual($filesize, filesize($filename));
         }, $finder->getFilenames());
 
         $filesystem->remove($workingPath);

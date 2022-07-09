@@ -53,7 +53,18 @@
         }
     },
     "scripts": {
-        "phpcs": "vendor/bin/phpcs src --standard=phpcs.xml",
+        "git-pre-commit": [],
+        "git-pre-push": [],
+        "phpcbf": "vendor/bin/phpcbf",
+        "phpcs": "vendor/bin/phpcs",
+        "phpstan": "rm -fr build/phpstan && mkdir -p build/phpstan && vendor/bin/phpstan analyse --error-format=raw | tee build/phpstan/output.txt",
+        "phpstan-baseline": "vendor/bin/phpstan analyse --generate-baseline",
+        "qa": [
+            "@phpcbf",
+            "@phpcs",
+            "@phpstan",
+            "@test"
+        ],
         "test": "vendor/bin/phpunit"
     }
 }

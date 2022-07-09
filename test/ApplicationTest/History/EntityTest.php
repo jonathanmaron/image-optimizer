@@ -7,7 +7,7 @@ use Application\History\Entity;
 
 class EntityTest extends AbstractTestCase
 {
-    protected $entity;
+    protected Entity $entity;
 
     protected function setUp(): void
     {
@@ -30,7 +30,7 @@ class EntityTest extends AbstractTestCase
         $expected = '0a645e6aff6887af8a2bdeb877e5304a4815340e743cb2d52a134acdd57a8c57';
         $actual   = $this->entity->getId();
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGetFilesize(): void
@@ -38,7 +38,7 @@ class EntityTest extends AbstractTestCase
         $expected = 2495270;
         $actual   = $this->entity->getFilesize();
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGetFilemtime(): void
@@ -46,14 +46,15 @@ class EntityTest extends AbstractTestCase
         $expected = 1549259198;
         $actual   = $this->entity->getFilemtime();
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGetFilename(): void
     {
-        $expected = $this->getTestAssetFilename();;
-        $actual   = $this->entity->getFilename();
+        $expected = $this->getTestAssetFilename();
+        ;
+        $actual = $this->entity->getFilename();
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

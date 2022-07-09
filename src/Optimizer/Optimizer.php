@@ -48,7 +48,9 @@ class Optimizer extends AbstractOptimizer
             throw new RuntimeException($message);
         }
 
-        $mode      = fileperms($filename);
+        $mode = fileperms($filename);
+        assert(is_int($mode));
+
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $extension = strtolower($extension);
 

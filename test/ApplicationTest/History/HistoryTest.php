@@ -7,7 +7,7 @@ use Application\History\History;
 
 class HistoryTest extends AbstractTestCase
 {
-    protected $history;
+    protected History $history;
 
     protected function setUp(): void
     {
@@ -29,8 +29,8 @@ class HistoryTest extends AbstractTestCase
         $expected2 = '.image_optimizer_3.0';
         $actual    = $this->history->getBasePath();
 
-        $this->assertStringContainsString($expected1, $actual);
-        $this->assertStringContainsString($expected2, $actual);
+        self::assertStringContainsString($expected1, $actual);
+        self::assertStringContainsString($expected2, $actual);
     }
 
     public function testGetEntityFilename(): void
@@ -41,8 +41,8 @@ class HistoryTest extends AbstractTestCase
         $expected2 = '/48/d1/04/48d10460971376c6fe3d5bbf5d3af2443aff9aade89d2f036eb1a879eea2d15e.serialized';
         $actual    = $this->history->getEntityFilename($filename);
 
-        $this->assertStringContainsString($expected1, $actual);
-        $this->assertStringContainsString($expected2, $actual);
+        self::assertStringContainsString($expected1, $actual);
+        self::assertStringContainsString($expected2, $actual);
     }
 
     public function testImageStatus(): void
@@ -50,18 +50,18 @@ class HistoryTest extends AbstractTestCase
         $filename = $this->getTestAssetFilename();
 
         $actual = $this->history->isOptimized($filename);
-        $this->assertFalse($actual);
+        self::assertFalse($actual);
 
         $actual = $this->history->setAsOptimized($filename);
-        $this->assertTrue($actual);
+        self::assertTrue($actual);
 
         $actual = $this->history->isOptimized($filename);
-        $this->assertTrue($actual);
+        self::assertTrue($actual);
 
         $actual = $this->history->setAsUnoptimized($filename);
-        $this->assertTrue($actual);
+        self::assertTrue($actual);
 
         $actual = $this->history->isOptimized($filename);
-        $this->assertFalse($actual);
+        self::assertFalse($actual);
     }
 }

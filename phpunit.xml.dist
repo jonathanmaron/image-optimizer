@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit colors="true" verbose="true"  bootstrap="test/bootstrap.php">
-
-    <testsuites>
-        <testsuite name="image-optimizer">
-            <directory>test</directory>
-        </testsuite>
-    </testsuites>
-
-    <php>
-        <ini name="error_reporting" value="E_ALL"/>
-        <ini name="date.timezone" value="UTC"/>
-        <ini name="intl.default_locale" value="en_US"/>
-    </php>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-html" target="build/phpunit"/>
-    </logging>
-
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" verbose="true" bootstrap="test/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+    <report>
+      <html outputDirectory="build/phpunit"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="jonathanmaron/image-optimizer">
+      <directory>test</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <ini name="error_reporting" value="E_ALL"/>
+    <ini name="date.timezone" value="UTC"/>
+    <ini name="intl.default_locale" value="en_US"/>
+  </php>
+  <logging/>
 </phpunit>

@@ -9,7 +9,7 @@ use Symfony\Component\Config\FileLocator;
 
 class LoaderTest extends TestCase
 {
-    protected $loader;
+    protected Loader $loader;
 
     protected function setUp(): void
     {
@@ -30,21 +30,21 @@ class LoaderTest extends TestCase
         parent::tearDown();
     }
 
-    function testSupports(): void
+    public function testSupports(): void
     {
         $actual = $this->loader->supports('application.xxx');
-        $this->assertFalse($actual);
+        self::assertFalse($actual);
 
         $actual = $this->loader->supports('application.yaml.xxx');
-        $this->assertFalse($actual);
+        self::assertFalse($actual);
 
         $actual = $this->loader->supports('application.yaml.dist.xxx');
-        $this->assertFalse($actual);
+        self::assertFalse($actual);
 
         $actual = $this->loader->supports('application.yaml');
-        $this->assertTrue($actual);
+        self::assertTrue($actual);
 
         $actual = $this->loader->supports('application.yaml.dist');
-        $this->assertTrue($actual);
+        self::assertTrue($actual);
     }
 }

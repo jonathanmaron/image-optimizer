@@ -8,7 +8,6 @@ use Application\Statistics\Statistics;
 use Application\Utility\ArgumentsTrait;
 use Application\Utility\ConfigTrait;
 use Application\Utility\DependenciesTrait;
-use NumberFormatter;
 use Symfony\Component\Console\Command\Command as ParentCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,6 +24,8 @@ abstract class AbstractCommand extends ParentCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        assert(method_exists($this, 'main'));
+
         $this->banner($input, $output, self::BANNER_START);
         $this->main($input, $output);
         $this->banner($input, $output, self::BANNER_END);
@@ -39,7 +40,8 @@ abstract class AbstractCommand extends ParentCommand
 
         switch ($type) {
             case self::BANNER_START:
-                $command  = $input->getArgument('command');
+                $command = $input->getArgument('command');
+                assert(is_string($command));
                 $messages = [
                     '',
                     sprintf('## Command    : %s', $command),
@@ -92,6 +94,6 @@ abstract class AbstractCommand extends ParentCommand
             sprintf('Out       : %s b', $formatter->format($totalBytesOut)),
             sprintf('Diff      : %s b (%01.4f %%)', $formatter->format($totalBytesDiff), $totalBytesDiffAsPct),
         ];
-        $output->writeLn($messages);
+        $output->writeln($messages);
     }
 }

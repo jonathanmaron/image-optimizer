@@ -63,7 +63,10 @@ class Entity
      */
     public static function id(string $filename): string
     {
-        return hash_file(self::HASH_ALGORITHM, $filename);
+        $string = hash_file(self::HASH_ALGORITHM, $filename);
+        assert(is_string($string));
+
+        return $string;
     }
 
     /**
@@ -75,7 +78,10 @@ class Entity
      */
     public static function filesize(string $filename): int
     {
-        return \filesize($filename);
+        $int = filesize($filename);
+        assert(is_int($int));
+
+        return $int;
     }
 
     /**
@@ -87,7 +93,10 @@ class Entity
      */
     public static function filemtime(string $filename): int
     {
-        return \filemtime($filename);
+        $int = filemtime($filename);
+        assert(is_int($int));
+
+        return $int;
     }
 
     /**

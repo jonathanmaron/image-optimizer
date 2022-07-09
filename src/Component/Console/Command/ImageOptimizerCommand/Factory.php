@@ -24,9 +24,9 @@ class Factory
         ];
 
     public function __invoke(
-        ?ContainerInterface $container = null,
-        ?string $requestedName = null,
-        ?array $options = null
+        ContainerInterface $container = null,
+        string $requestedName = '',
+        array $options = []
     ): Command {
 
         $locale = locale_get_default();
@@ -39,6 +39,8 @@ class Factory
         $statistics      = new Statistics();
 
         $command = new $requestedName;
+        assert($command instanceof AbstractCommand);
+
         $command->setConfig($config);
         $command->setFinder($finder);
         $command->setHistory($history);
@@ -65,7 +67,7 @@ class Factory
             try {
                 $filename = $locator->locate($name, null, true);
                 $config   = $loader->load($filename);
-            } catch (InvalidArgumentException | FileLocatorFileNotFoundException $e) {
+            } catch (InvalidArgumentException|FileLocatorFileNotFoundException $e) {
             }
             if (count($config) > 0) {
                 $ret = array_merge($ret, $config);

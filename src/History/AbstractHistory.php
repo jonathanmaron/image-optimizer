@@ -27,7 +27,7 @@ abstract class AbstractHistory
     protected const ENTITY_DIRECTORY_DEPTH = 3;
 
     /**
-     * Length of each sub-directory name in Entity directory
+     * Length of each subdirectory name in Entity directory
      *
      * @var integer
      */

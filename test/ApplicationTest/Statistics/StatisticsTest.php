@@ -7,7 +7,7 @@ use Application\Statistics\Statistics;
 
 class StatisticsTest extends AbstractTestCase
 {
-    protected $statistics;
+    protected Statistics $statistics;
 
     protected function setUp(): void
     {
@@ -27,96 +27,96 @@ class StatisticsTest extends AbstractTestCase
     {
         $expected = 0;
         $actual   = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 1;
         $this->statistics->incrementSkipped();
         $actual = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 2;
         $this->statistics->incrementSkipped();
         $actual = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 3;
         $this->statistics->incrementSkipped();
         $actual = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 4;
         $this->statistics->incrementSkipped();
         $actual = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 5;
         $this->statistics->incrementSkipped();
         $actual = $this->statistics->getSkipped();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testIncrementOptimized(): void
     {
         $expected = 0;
         $actual   = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 1;
         $this->statistics->incrementOptimized();
         $actual = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 2;
         $this->statistics->incrementOptimized();
         $actual = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 3;
         $this->statistics->incrementOptimized();
         $actual = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 4;
         $this->statistics->incrementOptimized();
         $actual = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 5;
         $this->statistics->incrementOptimized();
         $actual = $this->statistics->getOptimized();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testIncrementIndexed(): void
     {
         $expected = 0;
         $actual   = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 1;
         $this->statistics->incrementIndexed();
         $actual = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 2;
         $this->statistics->incrementIndexed();
         $actual = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 3;
         $this->statistics->incrementIndexed();
         $actual = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 4;
         $this->statistics->incrementIndexed();
         $actual = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 5;
         $this->statistics->incrementIndexed();
         $actual = $this->statistics->getIndexed();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testBytesInOutCalculation(): void
@@ -126,11 +126,11 @@ class StatisticsTest extends AbstractTestCase
 
         $expected = 25;
         $actual   = $this->statistics->getBytesDifference();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 25.0;
         $actual   = $this->statistics->getBytesDifferenceAsPercentage();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $this->statistics->resetBytesIn();
         $this->statistics->resetBytesOut();
@@ -145,10 +145,10 @@ class StatisticsTest extends AbstractTestCase
 
         $expected = 275;
         $actual   = $this->statistics->getTotalBytesDifference();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
 
         $expected = 25.0;
         $actual   = $this->statistics->getTotalBytesDifferenceAsPercentage();
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }

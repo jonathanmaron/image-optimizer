@@ -40,11 +40,11 @@ abstract class AbstractOptimizer
     /**
      * Return true is className is active
      *
-     * @param $className
+     * @param string $className
      *
      * @return bool
      */
-    protected function isActive($className): bool
+    protected function isActive(string $className): bool
     {
         $config = $this->getConfig();
 
