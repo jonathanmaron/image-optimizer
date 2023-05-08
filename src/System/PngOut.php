@@ -35,7 +35,6 @@ class PngOut extends AbstractSystem implements InterfaceSystem
             self::EXEC,
             $filename,
             '-s0',
-            '-v',
         ];
 
         return $this->execute($command);
